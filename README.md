@@ -1,6 +1,6 @@
 # White Brush [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lukasbindreiter/white-brush/blob/master/LICENSE)
 
-| branch        | status        | release |
+| branch        | status        | information |
 | ------------- | --------------| ------- |
 | **master**        | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=master)](https://travis-ci.org/lukasbindreiter/white-brush) |[Download latest release](https://github.com/lukasbindreiter/white-brush/releases)|
 | Christoph   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=developer%2Fchristoph)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=is%3Aopen+assignee%3AShynixn)
