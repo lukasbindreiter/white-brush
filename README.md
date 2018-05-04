@@ -1,4 +1,12 @@
-# White Brush
+# White Brush [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lukasbindreiter/white-brush/blob/master/LICENSE)
+
+| branch        | status        |
+| ------------- | --------------|
+| **master**        | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=master)](https://travis-ci.org/lukasbindreiter/white-brush) |
+| Christoph   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=developer%2Fchristoph)](https://travis-ci.org/lukasbindreiter/white-brush) |
+| Phillip   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=philipp)](https://travis-ci.org/lukasbindreiter/white-brush) |
+
+
  Enhancing hand-written notes
 
 ### Usage
