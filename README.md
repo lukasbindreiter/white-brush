@@ -4,7 +4,7 @@
 | ------------- | --------------| ------- |
 | **master**        | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=master)](https://travis-ci.org/lukasbindreiter/white-brush) |[Download latest release](https://github.com/lukasbindreiter/white-brush/releases)|
 | Christoph   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=developer%2Fchristoph)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=is%3Aopen+assignee%3AShynixn)
-| Phillipp   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=philipp)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?utf8=%E2%9C%93&q=is%3Aopen+assignee%3AEthlaron)
+| Philipp   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=philipp)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?utf8=%E2%9C%93&q=is%3Aopen+assignee%3AEthlaron)
 
  White Brush is a tool for enhancing hand-written notes.
 
