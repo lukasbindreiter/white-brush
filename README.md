@@ -24,5 +24,8 @@ wb.enhance_all(files)
 ```bash
 pipenv install --dev
 ```
-3. ???
+3. Run the tests
+```bash
+pytest
+```
 4. Profit
