@@ -1,9 +1,11 @@
+sudo: false
 language: python
 python:
   - "3.6"
+cache: pip
 # command to install dependencies
 install:
-  - pip install pipenv
+  - pip install pipenv --upgrade
   - pipenv install --dev
 # command to run tests
 script:
