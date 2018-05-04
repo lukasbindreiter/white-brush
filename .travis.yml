@@ -2,7 +2,9 @@ sudo: false
 language: python
 python:
   - "3.6"
-cache: pip
+cache:
+  directories:
+    - $HOME/.cache
 # command to install dependencies
 install:
   - pip install pipenv --upgrade
