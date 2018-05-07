@@ -9,6 +9,8 @@ opencv-python = "*"
 
 [dev-packages]
 pytest = "*"
+pytest-cov = "*"
+coveralls = "*"
 
 [requires]
 python_version = "3.6"
