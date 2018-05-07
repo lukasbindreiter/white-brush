@@ -1,13 +1,16 @@
-# White Brush [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lukasbindreiter/white-brush/blob/master/LICENSE)
+# White Brush [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/lukasbindreiter/white-brush/blob/master/LICENSE)
 
-| branch        | status        | information |
+White Brush is a tool for enhancing hand-written notes.
+
+### Build Status
+
+| Branch        | Status        | Information |
 | ------------- | --------------| ------- |
-| **master**        | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=master)](https://travis-ci.org/lukasbindreiter/white-brush) | [![Coverage Status](https://coveralls.io/repos/github/lukasbindreiter/white-brush/badge.svg)](https://coveralls.io/github/lukasbindreiter/white-brush) |
-| Christoph   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=developer%2Fchristoph)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=is%3Aopen+assignee%3AShynixn)
-| Philipp   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=philipp)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=assignee%3Ap-hofer+is%3Aopen)
-| Lukas   | [![Build Status](https://travis-ci.org/lukasbindreiter/white-brush.svg?branch=developer%2Flukas)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=assignee%3Alukasbindreiter+is%3Aopen)
+| **master**        | [![Build Status](https://img.shields.io/travis/lukasbindreiter/white-brush/master.svg?style=flat-square)](https://travis-ci.org/lukasbindreiter/white-brush) | [![Coverage Status](https://img.shields.io/coveralls/lukasbindreiter/white-brush/master.svg?style=flat-square)](https://coveralls.io/github/lukasbindreiter/white-brush?branch=master) |
+| Christoph   | [![Build Status](https://img.shields.io/travis/lukasbindreiter/white-brush/developer/christoph.svg?style=flat-square)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=is%3Aopen+assignee%3AShynixn) [![Coverage Status](https://img.shields.io/coveralls/lukasbindreiter/white-brush/developer/christoph.svg?style=flat-square)](https://coveralls.io/github/lukasbindreiter/white-brush?branch=developer%2Fchristoph) |
+| Philipp   | [![Build Status](https://img.shields.io/travis/lukasbindreiter/white-brush/philipp.svg?style=flat-square)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=assignee%3Ap-hofer+is%3Aopen) [![Coverage Status](https://img.shields.io/coveralls/lukasbindreiter/white-brush/philipp.svg?style=flat-square)](https://coveralls.io/github/lukasbindreiter/white-brush?branch=philipp) |
+| Lukas   | [![Build Status](https://img.shields.io/travis/lukasbindreiter/white-brush/developer/lukas.svg?style=flat-square)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=assignee%3Alukasbindreiter+is%3Aopen) [![Coverage Status](https://img.shields.io/coveralls/lukasbindreiter/white-brush/developer/lukas.svg?style=flat-square)](https://coveralls.io/github/lukasbindreiter/white-brush?branch=developer%2Flukas) |
 
- White Brush is a tool for enhancing hand-written notes.
 
 ### Usage
 #### As executable  
