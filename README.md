@@ -36,3 +36,20 @@ pipenv install --dev
 ```bash
 pytest
 ```
+
+#### Docker Usage
+Instead of installing the `pipenv` dependencies on your system,
+you can also use the `Dockerfile` which is provided in the root directory:
+
+```bash
+docker build -t white-brush .
+docker run -it --rm white-brush python -m white_brush test_images/01.jpg 01_enhanced.jpg
+```
+
+Or to start a jupyter to which you can connect to take a look at the provided notebooks:
+```bash
+# First use docker build command above, then
+docker run -d --rm -p 8888:8888 white_brush
+```
+Then go ahead and connect to `http://localhost:8888` in your browser.
+
