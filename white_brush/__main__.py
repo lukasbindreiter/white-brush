@@ -1,4 +1,6 @@
 import argparse
+from white_brush import calc_colors
+import numpy as np
 
 
 def parse_args():
