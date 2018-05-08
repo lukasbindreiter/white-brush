@@ -17,7 +17,7 @@ def choose_representative_colors(colors: np.ndarray):
     colors = model[0]
     colors = colors.transpose()
 
-    for x in range(0,2):
+    for x in range(0, 2):
         minvalue = min(colors[x])
         maxvalue = max(colors[x])
 
