@@ -20,4 +20,4 @@ class TestCalcColors:
 
         (colors, assigned) = calc_colors.choose_representative_colors(input)
 
-        assert np.allclose(expected, colors), "Wrong representative colors are returned."
+        assert np.array_equiv(np.sort(colors, axis=0), np.sort(expected, axis=0)), "Wrong representative colors are returned."
