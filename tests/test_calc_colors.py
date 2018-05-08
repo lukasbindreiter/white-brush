@@ -9,7 +9,7 @@ class TestCalcColors:
         (colors, assigned) = calc_colors.choose_representative_colors(input)
         assert (colors == input).all(), "Wrong representative colors are returned, expect to get 8 times zeroes"
 
-    def test_choose_representative_colors_only_black(self):
+    def test_choose_representative_colors_different_values(self):
         input = np.array(
             [[254, 254, 254], [254, 254, 254], [254, 254, 254], [254, 254, 254], [254, 254, 254], [254, 254, 254],
              [254, 254, 254], [10, 10, 10]])
