@@ -2,7 +2,7 @@ from sklearn import cluster
 import numpy as np
 
 
-def choose_representative_colors(colors: np.ndarray, coloramount=8):
+def choose_representative_colors(colors: np.ndarray, n=8):
     """
     Calculates representative colors of a given array of colors. Furthermore
     it is improving the colors by rescaling the minimum and maximum intensity
@@ -10,12 +10,12 @@ def choose_representative_colors(colors: np.ndarray, coloramount=8):
 
     Args:
         colors: A list of rgb color values.
-        coloramount: Specifies
+        n: Specifies how many representative colors will be chosen from the color set
 
     Returns: A 2-tuple. The first element is a list with 8 elements which specifies the 8 different colors.
         The second element is a list with size colors.length which specifies which of the eight colors is used.
     """
-    model = cluster.k_means(colors, coloramount)
+    model = cluster.k_means(colors, n)
     colors = model[0]
     colors = colors.transpose()
 
