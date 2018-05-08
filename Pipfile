@@ -13,6 +13,7 @@ scipy = "*"
 pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
+hypothesis = "*"
 
 [requires]
 python_version = "3.6"
