@@ -149,6 +149,11 @@ class TestEnhanceCommand(unittest.TestCase):
         enhance_configuration.replace_files = True
 
         # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
+        for i in range(1, 3):
+            f = open(files[i], "w+")
+            f.write("Hello World")
+            f.close()
         class_under_test.execute(files, enhance_configuration)
 
         # Assert
