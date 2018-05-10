@@ -26,7 +26,7 @@ class CommandParser:
                             help="Selects all sub files in sub directories of the given files and directories.",
                             action="store_true")
         parser.add_argument("-c", "--convert",
-                            help="Replaces the files with their enhanced version.", action="store_true")
+                            help="Replaces the input files with their output files.", action="store_true")
         parser.add_argument("-m", "--mask",
                             help="Changes the mask of the target files. Default format: {name}_brushed{extension}"
                                  " where name is " "the placeholder for filename and extension the placeholder "
@@ -36,7 +36,7 @@ class CommandParser:
         parser.add_argument("-b", "--background",
                             help="Uses the given HTML Color code as background color.")
         parser.add_argument("-t", "--template",
-                            help="Uses the chosen template color codes for conversion.")
+                            help="Uses the chosen template color codes for conversion. Templates: whiteboard, blackboard, note.")
 
         args, unknown_args = parser.parse_known_args()
 
@@ -54,8 +54,7 @@ class CommandParser:
             self.template_command.execute(args.template, enhancement_configuration)
 
         if len(unknown_args) == 0:
-            print("Please specify atleast one file.")
+            print("Please specify atleast one file. whitebrush --help")
             return False
 
-        print(unknown_args)
         self.enhance_command.execute(unknown_args, enhancement_configuration)

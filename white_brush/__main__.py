@@ -1,19 +1,15 @@
-import argparse
-from white_brush import calc_colors
-import numpy as np
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("input_file")
-    parser.add_argument("output_file")
-    return parser.parse_args()
+from white_brush.command_parser import CommandParser
+from white_brush.commands.enhance_command import EnhanceCommand
+from white_brush.commands.template_command import TemplateCommand
+from white_brush.services.enhance_service import EnhanceService
 
 
 def main():
-    args = parse_args()
-
-    print("Input: {}, Output: {}".format(args.input_file, args.output_file))
+    """
+    Entry point of the application which parses the given arguments.
+    """
+    command_parser = CommandParser(EnhanceCommand(EnhanceService()), TemplateCommand())
+    command_parser.parse_args()
 
 
 if __name__ == "__main__":
