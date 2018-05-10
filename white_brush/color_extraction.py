@@ -17,12 +17,18 @@ def extract_background_color(img: np.ndarray) -> np.ndarray:
         together.
 
     """
+    # only use a subset of the colors of the image
     sample = _color_sample(img)
+    # reduce bit depth
     mask = _generate_bitmask(2, 8)
     reduced_colors = sample & mask
+    # combine r, g and b into one single value
     rgb = _combine_rgb_values(*[reduced_colors[:, i] for i in range(3)])
+    # find the most frequent color (=mode)
     mode, count = stats.mode(rgb)
-    most_frequent = np.array(_separate_rgb_values(mode)).reshape(3)
+    # convert back to separate r, g and b
+    most_frequent = np.array(_separate_rgb_values(mode),
+                             dtype=np.uint8).reshape(3)
     return most_frequent
 
 
@@ -42,6 +48,7 @@ def _color_sample(img: np.ndarray, p: float = 0.05) -> np.ndarray:
     Returns:
         Color sample of shape (N, 3)
     """
+    # combine the X and Y dimension into one, only keep the channels dimension
     ravelled = img.reshape(-1, 3)
     # for 5%, take every 20th value, for 10% every 10th, etc...
     every_nth = int(1 / p)
@@ -50,17 +57,21 @@ def _color_sample(img: np.ndarray, p: float = 0.05) -> np.ndarray:
 
 def _generate_bitmask(n: int = 2, n_bits: int = 8) -> int:
     """
-    Generate a number to cancel the least significant bits of a number
+    Generate a binary number with zeros at the end
 
-    Calculate value which, if applied as logical and, sets the lowest
+    Calculate a value which, if applied as logical and, sets the lowest
     `n` bits to 0.
+
+    Example:
+    >>> _generate_bitmask(2, 8) == 0b11111100
+    >>> True
 
     Args:
         n: The number of bits which should be set to zero
         n_bits: Bit size of the number on which the mask will be applied
 
     Returns:
-        int
+        The generated bitmask as integer
 
     """
     all_ones = 2 ** n_bits - 1

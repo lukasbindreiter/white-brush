@@ -14,4 +14,6 @@ def get_test_images():
     Returns: Generator
     """
     for image in os.listdir("test_images"):
+        if image.startswith("."):
+            continue
         yield image, read_image(os.path.join("test_images", image))
