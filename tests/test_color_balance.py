@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from hypothesis import given, assume
+from hypothesis import given, assume, reproduce_failure
 from hypothesis.extra.numpy import arrays
 
 from tests.resources import get_test_images
@@ -31,7 +31,7 @@ class TestColorBalance:
                 assert channel.max() == 255, \
                     "Minimum of each channel should be 0"
 
-    @given(arrays(shape=(100, 100, 3), dtype=np.uint8))
+    @given(arrays(shape=(10, 10, 3), dtype=np.uint8))
     def test_color_balance_random_images(self, img):
         """
         Given random test images
@@ -50,7 +50,7 @@ class TestColorBalance:
         for channel in cv2.split(img):
             assume(len(np.unique(channel)) >= 2)
 
-        balanced_img = balance_color(img)
+        balanced_img = balance_color(img, percentile=0)
 
         assert balanced_img.max() == 255, \
             "Maximum of a balanced image should be 255"
@@ -59,5 +59,5 @@ class TestColorBalance:
         for channel in cv2.split(balanced_img):
             assert channel.max() == 255, \
                 "Maximum of each channel should be 255"
-            assert channel.max() == 255, \
+            assert channel.min() == 0, \
                 "Minimum of each channel should be 0"
