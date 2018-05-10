@@ -7,7 +7,7 @@ from white_brush.entities.enhancement_configuration import EnhancementConfigurat
 
 class TestCommandParser(unittest.TestCase):
 
-    # region Command parse_args
+    # region parse_args
 
     def test_parse_args_given_files_should_call_FileEnhanceCommand(self):
         """
