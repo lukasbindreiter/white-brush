@@ -31,7 +31,7 @@ class TestCommandParser(unittest.TestCase):
         # Assert
         self.assertTrue(mocked_enhance_command.called)
         self.assertFalse(mocked_enhance_command.used_configuration.recursive)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 3)
+        self.assertEqual(3, mocked_enhance_command.amount_of_processed_files)
 
     def test_parse_args_given_no_files_should_not_call_FileEnhanceCommand(self):
         """
@@ -77,7 +77,7 @@ class TestCommandParser(unittest.TestCase):
         # Assert
         self.assertTrue(mocked_enhance_command.called)
         self.assertTrue(mocked_enhance_command.used_configuration.recursive)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 2)
+        self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
 
     def test_parse_args_given_files_with_convert_tag_should_call_FileEnhanceCommand(self):
         """
@@ -101,7 +101,7 @@ class TestCommandParser(unittest.TestCase):
         # Assert
         self.assertTrue(mocked_enhance_command.called)
         self.assertTrue(mocked_enhance_command.used_configuration.replace_files)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 2)
+        self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
 
     def test_parse_args_given_files_with_mask_tag_should_call_FileEnhanceCommand(self):
         """
@@ -125,8 +125,8 @@ class TestCommandParser(unittest.TestCase):
 
         # Assert
         self.assertTrue(mocked_enhance_command.called)
-        self.assertEqual(mocked_enhance_command.used_configuration.target_file_mask, expected)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 1)
+        self.assertEqual(expected, mocked_enhance_command.used_configuration.target_file_mask)
+        self.assertEqual(1, mocked_enhance_command.amount_of_processed_files)
 
     def test_parse_args_given_files_with_background_tag_should_call_FileEnhanceCommand(self):
         """
@@ -150,8 +150,8 @@ class TestCommandParser(unittest.TestCase):
 
         # Assert
         self.assertTrue(mocked_enhance_command.called)
-        self.assertEqual(mocked_enhance_command.used_configuration.background_color, expected)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 1)
+        self.assertEqual(expected, mocked_enhance_command.used_configuration.background_color)
+        self.assertEqual(1, mocked_enhance_command.amount_of_processed_files)
 
     def test_parse_args_given_files_with_foreground_tag_should_call_FileEnhanceCommand(self):
         """
@@ -175,8 +175,8 @@ class TestCommandParser(unittest.TestCase):
 
         # Assert
         self.assertTrue(mocked_enhance_command.called)
-        self.assertEqual(mocked_enhance_command.used_configuration.foreground_color, expected)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 1)
+        self.assertEqual(expected, mocked_enhance_command.used_configuration.foreground_color)
+        self.assertEqual(1, mocked_enhance_command.amount_of_processed_files)
 
     def test_parse_args_given_files_with_template_tag_should_call_TemplateCommand(self):
         """
@@ -199,7 +199,7 @@ class TestCommandParser(unittest.TestCase):
 
         # Assert
         self.assertTrue(mocked_template_command.called)
-        self.assertEqual(mocked_enhance_command.amount_of_processed_files, 2)
+        self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
 
     # endregion
 

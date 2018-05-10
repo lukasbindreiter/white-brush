@@ -65,9 +65,6 @@ class EnhanceCommand:
             print("Input '" + source_file + "' does not exist. whitebrush --help")
             return
 
-        if os.path.exists(target_file):
-            os.remove(target_file)
-
         print("Enhancing '" + os.path.basename(source_file) + "' to '" + os.path.basename(target_file) + ".")
         self.file_enhance_service.enhance_file(source_file, target_file,
                                                ColorConfiguration(enhance_configuration.foreground_color,

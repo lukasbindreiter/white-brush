@@ -26,18 +26,18 @@ class TestEnhanceCommand(unittest.TestCase):
         class_under_test.execute(files, enhance_configuration)
 
         # Assert
-        self.assertTrue(mocked_enhance_service.called, True)
+        self.assertTrue(mocked_enhance_service.called)
 
     def test_execute_given_multiple_files_enhancement_configuration_should_call_service(self):
         # Arrange
-        files = ['../.pytest_cache/testfile1.png','../.pytest_cache/testfile2.png','../.pytest_cache/testfile3.png']
+        files = ['../.pytest_cache/testfile1.png', '../.pytest_cache/testfile2.png', '../.pytest_cache/testfile3.png']
         mocked_enhance_service = MockedEnhanceService()
         class_under_test = EnhanceCommand(mocked_enhance_service)
         enhance_configuration = EnhancementConfiguration()
 
         # Act
         pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
-        for i in range(1,3):
+        for i in range(1, 3):
             f = open(files[i], "w+")
             f.write("Hello World")
             f.close()
@@ -45,8 +45,8 @@ class TestEnhanceCommand(unittest.TestCase):
         class_under_test.execute(files, enhance_configuration)
 
         # Assert
-        self.assertTrue(mocked_enhance_service.called, True)
-        self.assertEqual(mocked_enhance_service.called_counter, 3)
+        self.assertTrue(mocked_enhance_service.called)
+        self.assertEqual(3, mocked_enhance_service.called_counter)
 
     def test_execute_given_files_and_directories_enhancement_configuration_should_call_service(self):
         # Arrange
@@ -65,8 +65,8 @@ class TestEnhanceCommand(unittest.TestCase):
         class_under_test.execute(files, enhance_configuration)
 
         # Assert
-        self.assertTrue(mocked_enhance_service.called, True)
-        self.assertEqual(mocked_enhance_service.called_counter, 2)
+        self.assertTrue(mocked_enhance_service.called)
+        self.assertEqual(2, mocked_enhance_service.called_counter)
 
     def test_execute_given_files_and_subdirectories_configuration_should_call_service(self):
         # Arrange
@@ -95,10 +95,26 @@ class TestEnhanceCommand(unittest.TestCase):
         class_under_test.execute(files, enhance_configuration)
 
         # Assert
-        self.assertTrue(mocked_enhance_service.called, True)
-        self.assertEqual(mocked_enhance_service.called_counter, 3)
-        self.assertEqual(mocked_enhance_service.called_color_configuration.foreground_color, expected_foreground)
-        self.assertEqual(mocked_enhance_service.called_color_configuration.background_color, expected_background)
+        self.assertTrue(mocked_enhance_service.called)
+        self.assertEqual(3, mocked_enhance_service.called_counter)
+        self.assertEqual(expected_foreground, mocked_enhance_service.called_color_configuration.foreground_color)
+        self.assertEqual(expected_background, mocked_enhance_service.called_color_configuration.background_color)
+
+    def test_execute_given_files_and_convert_should_call_service(self):
+        # Arrange
+        files = ['../.pytest_cache/testfile1.png', '../.pytest_cache/testfile2.png', '../.pytest_cache/testfile3.png']
+        mocked_enhance_service = MockedEnhanceService()
+        class_under_test = EnhanceCommand(mocked_enhance_service)
+        enhance_configuration = EnhancementConfiguration()
+        enhance_configuration.replace_files = True
+
+        # Act
+        class_under_test.execute(files, enhance_configuration)
+
+        # Assert
+        self.assertTrue(mocked_enhance_service.called)
+        self.assertEqual(3, mocked_enhance_service.called_counter)
+        self.assertEqual(3, mocked_enhance_service.same_file_name_amount)
 
     # endregion
 
@@ -110,11 +126,15 @@ class MockedEnhanceService:
         self.called = False
         self.called_counter = 0
         self.called_color_configuration = ColorConfiguration()
+        self.same_file_name_amount = 0
 
     def enhance_file(self, input_file_name, output_file_name, color_configuration):
         self.called = True
         self.called_counter += 1
         self.called_color_configuration = color_configuration
+        if input_file_name == output_file_name:
+            self.same_file_name_amount += 1
+
 
 
 if __name__ == '__main__':
