@@ -50,7 +50,7 @@ class EnhanceCommand:
             while os.path.exists(target_file):
                 target_file = os.path.dirname(file) + "/" + enhance_configuration.target_file_mask.replace("{name}",
                                                                                                            filename).replace(
-                    "{extension}", " (" + counter + ")" + extension)
+                    "{extension}", " (" + str(counter) + ")" + extension)
 
             self.__enhance_file__(file, target_file, enhance_configuration)
 
