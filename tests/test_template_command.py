@@ -29,8 +29,8 @@ class TestTemplateCommand(unittest.TestCase):
         class_under_test.execute(template, enhance_configuration)
 
         # Assert
-        self.assertEqual(enhance_configuration.foreground_color, expected_foreground)
-        self.assertEqual(enhance_configuration.background_color, expected_background)
+        self.assertEqual(expected_foreground, enhance_configuration.foreground_color)
+        self.assertEqual(expected_background, enhance_configuration.background_color)
 
     def test_execute_given_no_matching_template_should_keep_default(self):
         """
@@ -53,8 +53,8 @@ class TestTemplateCommand(unittest.TestCase):
         class_under_test.execute(template, enhance_configuration)
 
         # Assert
-        self.assertEqual(enhance_configuration.foreground_color, expected_foreground)
-        self.assertEqual(enhance_configuration.background_color, expected_background)
+        self.assertEqual(expected_foreground, enhance_configuration.foreground_color)
+        self.assertEqual(expected_background, enhance_configuration.background_color)
 
     # endregion
 
