@@ -18,6 +18,7 @@ class TestEnhanceCommand(unittest.TestCase):
         enhance_configuration = EnhancementConfiguration()
 
         # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
         f = open(files[0], "w+")
         f.write("Hello World")
         f.close()
@@ -35,6 +36,7 @@ class TestEnhanceCommand(unittest.TestCase):
         enhance_configuration = EnhancementConfiguration()
 
         # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
         for i in range(1,3):
             f = open(files[i], "w+")
             f.write("Hello World")
@@ -54,6 +56,7 @@ class TestEnhanceCommand(unittest.TestCase):
         enhance_configuration = EnhancementConfiguration()
 
         # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
         pathlib.Path(files[1]).mkdir(parents=True, exist_ok=True)
         f = open(files[1] + "/sample.jpg", "w+")
         f.write("Hello World")
@@ -79,6 +82,7 @@ class TestEnhanceCommand(unittest.TestCase):
         expected_background = "#back"
 
         # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
         pathlib.Path(files[1]).mkdir(parents=True, exist_ok=True)
         f = open(files[1] + "/sample.jpg", "w+")
         f.write("Hello World")
