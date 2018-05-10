@@ -4,7 +4,7 @@ from white_brush.commands.template_command import TemplateCommand
 from white_brush.entities.enhancement_configuration import EnhancementConfiguration
 
 
-class TestCommandParser(unittest.TestCase):
+class TestTemplateCommand(unittest.TestCase):
 
     # region execute
 

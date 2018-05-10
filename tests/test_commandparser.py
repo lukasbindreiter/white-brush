@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from white_brush.commands.command_parser import CommandParser
+from white_brush.command_parser import CommandParser
 from white_brush.entities.enhancement_configuration import EnhancementConfiguration
 
 
