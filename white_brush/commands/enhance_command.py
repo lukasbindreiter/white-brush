@@ -23,10 +23,11 @@ class EnhanceCommand:
             self.__enhance_file_or_directory__(file, 0, enhance_configuration)
 
     def __enhance_file_or_directory__(self, file, counter, enhance_configuration):
-        if os.path.isdir(file) and (enhance_configuration.recursive or counter == 0):
-            for sub_file in os.listdir(file):
-                self.__enhance_file_or_directory__(sub_file, counter + 1, enhance_configuration)
-
+        if os.path.isdir(file):
+            if enhance_configuration.recursive or counter == 0:
+                for sub_file in os.listdir(file):
+                    self.__enhance_file_or_directory__(file + "/" + sub_file, counter + 1, enhance_configuration)
+            return
         if enhance_configuration.replace_files:
             self.__enhance_file__(file, file, enhance_configuration)
         else:
