@@ -11,6 +11,14 @@ class TestEnhanceCommand(unittest.TestCase):
     # region execute
 
     def test_execute_given_file_enhancement_configuration_should_call_service(self):
+        """
+             Given
+                   valid file
+             When
+                   CommandParser.parse_args() is called
+             Then
+                   Enhance service should be called.
+        """
         # Arrange
         files = ['../.pytest_cache/testfile1.png']
         mocked_enhance_service = MockedEnhanceService()
@@ -29,6 +37,14 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertTrue(mocked_enhance_service.called)
 
     def test_execute_given_multiple_files_enhancement_configuration_should_call_service(self):
+        """
+             Given
+                   valid files
+             When
+                   CommandParser.parse_args() is called
+             Then
+                   Enhance service should be called for each file.
+        """
         # Arrange
         files = ['../.pytest_cache/testfile1.png', '../.pytest_cache/testfile2.png', '../.pytest_cache/testfile3.png']
         mocked_enhance_service = MockedEnhanceService()
@@ -49,6 +65,14 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertEqual(3, mocked_enhance_service.called_counter)
 
     def test_execute_given_files_and_directories_enhancement_configuration_should_call_service(self):
+        """
+           Given
+                 valid files and subdirectories without recursive tag.
+           When
+                 CommandParser.parse_args() is called
+           Then
+                 Enhance service with all files and only files in the first sub diretory should be called.
+        """
         # Arrange
         files = ['../.pytest_cache/testfile1.png', '../.pytest_cache/testdirectory']
         mocked_enhance_service = MockedEnhanceService()
@@ -69,6 +93,14 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertEqual(2, mocked_enhance_service.called_counter)
 
     def test_execute_given_files_and_subdirectories_configuration_should_call_service(self):
+        """
+            Given
+                  valid files and subdirectories with recursive tag.
+            When
+                  CommandParser.parse_args() is called
+            Then
+                  Enhance service with all files and not directories should be called.
+        """
         # Arrange
         files = ['../.pytest_cache/testfile1.png', '../.pytest_cache/testdirectory']
         mocked_enhance_service = MockedEnhanceService()
@@ -101,6 +133,14 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertEqual(expected_background, mocked_enhance_service.called_color_configuration.background_color)
 
     def test_execute_given_files_and_convert_should_call_service(self):
+        """
+             Given
+                   valid files and replace file tag
+             When
+                   CommandParser.parse_args() is called
+             Then
+                   Enhance service with the same file names should be called.
+        """
         # Arrange
         files = ['../.pytest_cache/testfile1.png', '../.pytest_cache/testfile2.png', '../.pytest_cache/testfile3.png']
         mocked_enhance_service = MockedEnhanceService()
@@ -115,6 +155,35 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertTrue(mocked_enhance_service.called)
         self.assertEqual(3, mocked_enhance_service.called_counter)
         self.assertEqual(3, mocked_enhance_service.same_file_name_amount)
+
+    def test_execute_given_files_and_existing_target_should_call_service(self):
+        """
+            Given
+                 valid file and existing target file
+            When
+                 CommandParser.parse_args() is called
+            Then
+                 Enhance service should be called.
+        """
+        # Arrange
+        files = ['../.pytest_cache/testfile5.png']
+        mocked_enhance_service = MockedEnhanceService()
+        class_under_test = EnhanceCommand(mocked_enhance_service)
+        enhance_configuration = EnhancementConfiguration()
+
+        # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
+        f = open("../.pytest_cache/testfile5_brushed.png", "w+")
+        f.write("Hello World")
+        f.close()
+        f = open("../.pytest_cache/testfile5.png", "w+")
+        f.write("Hello World")
+        f.close()
+        class_under_test.execute(files, enhance_configuration)
+
+        # Assert
+        self.assertTrue(mocked_enhance_service.called)
+        self.assertEqual(1, mocked_enhance_service.called_counter)
 
     # endregion
 
@@ -134,7 +203,6 @@ class MockedEnhanceService:
         self.called_color_configuration = color_configuration
         if input_file_name == output_file_name:
             self.same_file_name_amount += 1
-
 
 
 if __name__ == '__main__':
