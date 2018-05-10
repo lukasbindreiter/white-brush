@@ -6,11 +6,14 @@ name = "pypi"
 [packages]
 numpy = "*"
 opencv-python = "*"
+sklearn = "*"
+scipy = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
+hypothesis = "*"
 
 [requires]
 python_version = "3.6"
