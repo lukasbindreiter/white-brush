@@ -7,8 +7,10 @@ class CommandParser:
     def __init__(self, enhance_command, template_command):
         """
         Creates a new CommandParser with the enhance_command and template_command as dependency.
-        :param enhance_command: command executing the enhancement process.
-        :param template_command: command matching the template to the color codes.
+
+        Args:
+            enhance_command: command executing the enhancement process.
+            template_command: command matching the template to the color codes
         """
         self.enhance_command = enhance_command
         self.template_command = template_command
@@ -17,7 +19,9 @@ class CommandParser:
         """
         Takes the sys.argv arguments and parses it by the given ArgumentParser specifications. Calls the
         command implementations.
-        :return: True when command got executed. False when command could not be parsed.
+
+        Returns:
+            True when command got executed. False when command could not be parsed.
         """
         parser = argparse.ArgumentParser()
         enhancement_configuration = EnhancementConfiguration()

@@ -4,7 +4,7 @@ from white_brush.entities.enhancement_configuration import EnhancementConfigurat
 class TemplateCommand:
     def __init__(self):
         """
-            Creates a new TemplateCommand.
+        Creates a new TemplateCommand.
         """
         self.default_templates = [("blackboard", "#FFFFFF", "#438D49"), ("whiteboard", "#000000", "#FFFFFF"),
                                   ("note", "#000000", "#E7EA1B")]
@@ -13,8 +13,10 @@ class TemplateCommand:
         """
         Executes the template command for the given template name and configuration. Replaces the color codes
         if the templates match.
-        :param template: template.
-        :param enhance_configuration: configuration containing color codes.
+
+        Args:
+            template: template.
+            enhance_configuration: configuration containing color codes.
         """
         template_data = next((x for x in self.default_templates if x[0].lower() == template.lower()), None)
 
