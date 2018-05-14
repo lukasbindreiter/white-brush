@@ -9,15 +9,19 @@ class EnhanceCommand:
     def __init__(self, file_enhance_service):
         """
         Creates a new FileEnhanceCommand with the file_enhance_service as dependency.
-        :param file_enhance_service: dependency
+
+        Args:
+            file_enhance_service: dependency
         """
         self.file_enhance_service = file_enhance_service
 
     def execute(self, list_of_files, enhance_configuration=EnhancementConfiguration()):
         """
         Executes the default command for the given file and directory parameters and additional configuration details.
-        :param list_of_files: list of files and directories
-        :param enhance_configuration: configuration values
+
+        Args:
+            list_of_files: list of files and directories
+            enhance_configuration: configuration values
         """
         for file in list_of_files:
             self.__enhance_file_or_directory__(file, 0, enhance_configuration)
@@ -25,9 +29,11 @@ class EnhanceCommand:
     def __enhance_file_or_directory__(self, file, counter, enhance_configuration):
         """
         Iterates the files and folders to match correct files which should be enhanced. Also increments file names and matches optional masks.
-        :param file: file or directory
-        :param counter: subdirectory counter
-        :param enhance_configuration: configuration
+
+        Args:
+            file: file or directory
+            counter: subdirectory counter
+            enhance_configuration: configuration
         """
         if os.path.isdir(file):
             if enhance_configuration.recursive or counter == 0:
@@ -41,6 +47,7 @@ class EnhanceCommand:
             filename = pathlib.Path(file).stem
             extension = pathlib.Path(file).suffix
 
+            #TODO: replace with str.format
             target_file = os.path.dirname(file) + "/" + enhance_configuration.target_file_mask.replace("{name}",
                                                                                                        filename).replace(
                 "{extension}",
@@ -57,9 +64,11 @@ class EnhanceCommand:
     def __enhance_file__(self, source_file, target_file, enhance_configuration):
         """
         Enhances the given source file to the target_file if it exists.
-        :param source_file: source file
-        :param target_file:  target file
-        :param enhance_configuration:  configuration
+
+        Args:
+            source_file: source file
+            target_file:  target file
+            enhance_configuration:  configuration
         """
         if not os.path.exists(source_file):
             print("Input '" + source_file + "' does not exist. whitebrush --help")
