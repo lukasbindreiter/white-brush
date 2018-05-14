@@ -38,6 +38,8 @@ pipenv install --dev
 3. Run the tests
 ```bash
 pytest
+# to output a code coverage report
+pytest --cov=white_brush --cov-report html
 ```
 
 #### Docker Usage
