@@ -1,5 +1,5 @@
 import numpy as np
-from hypothesis import given
+from hypothesis import given, assume
 from hypothesis.extra.numpy import arrays
 from hypothesis.strategies import integers
 from numpy.testing import assert_allclose
@@ -56,23 +56,34 @@ class TestColorExtraction:
         assert int_to_binary_str(mask) == "1111111111110000"
 
     @given(integers(0, 255), integers(0, 255), integers(0, 255))
-    def test_combine_extract_rgb_values(self, r, g, b):
+    def test_pack_rgb_values(self, r, g, b):
         """
         Test converting between a color in r, g, b format
         (three separate integers) to a single 24bit representation and back
         """
-        rgb = color_extraction._combine_rgb_values(r, g, b)
-        assert color_extraction._separate_rgb_values(rgb) == (r, g, b)
+        rgb = color_extraction._pack_rgb_values(r, g, b)
+        assert color_extraction._unpack_rgb_values(rgb) == (r, g, b)
+
+    @given(arrays(np.uint8, (2, 3)))
+    def test_pack_rgb_uniqueness(self, colors):
+        """
+        Assert that converting two different colors from r, g, b format
+        (three separate integers) to a single 24bit representation
+        results in two different values."""
+        assume(np.any(colors[0] != colors[1]))
+        c1 = color_extraction._pack_rgb_values(*colors[0])
+        c2 = color_extraction._pack_rgb_values(*colors[1])
+        assert c1 != c2
 
     @given(arrays(np.uint8, (100, 3)))
-    def test_combine_extract_rgb_values_array(self, rgb_arr):
+    def test_pack_rgb_values_array(self, rgb_arr):
         """
         Test converting between many colors in r, g, b format
         (three separate arrays) to a single 24bit representation and back
         """
-        rgb = color_extraction._combine_rgb_values(rgb_arr[:, 0],
+        rgb = color_extraction._pack_rgb_values(rgb_arr[:, 0],
                                                    rgb_arr[:, 1],
                                                    rgb_arr[:, 2])
-        r, g, b = color_extraction._separate_rgb_values(rgb)
+        r, g, b = color_extraction._unpack_rgb_values(rgb)
         rgb_back = np.stack([r, g, b], axis=1)
         assert_allclose(rgb_arr, rgb_back)
