@@ -5,7 +5,7 @@ from hypothesis.strategies import integers
 from numpy.testing import assert_allclose
 
 from tests.resources import get_test_images
-from white_brush import color_extraction
+from white_brush.colors import color_extraction
 
 
 class TestColorExtraction:

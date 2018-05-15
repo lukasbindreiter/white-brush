@@ -1,4 +1,4 @@
-from white_brush import calc_colors
+from white_brush.colors import calc_colors
 import numpy as np
 
 
