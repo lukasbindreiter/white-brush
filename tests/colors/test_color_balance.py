@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
-from hypothesis import given, assume, reproduce_failure
+from hypothesis import given, assume
 from hypothesis.extra.numpy import arrays
 
 from tests.resources import get_test_images
-from white_brush.color_balance import balance_color
+from white_brush.colors.color_balance import balance_color
 
 
 class TestColorBalance:
