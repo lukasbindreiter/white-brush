@@ -23,11 +23,11 @@ def extract_background_color(img: np.ndarray) -> np.ndarray:
     mask = _generate_bitmask(2, 8)
     reduced_colors = sample & mask
     # combine r, g and b into one single value
-    rgb = _combine_rgb_values(*[reduced_colors[:, i] for i in range(3)])
+    rgb = _pack_rgb_values(*[reduced_colors[:, i] for i in range(3)])
     # find the most frequent color (=mode)
     mode, count = stats.mode(rgb)
     # convert back to separate r, g and b
-    most_frequent = np.array(_separate_rgb_values(mode),
+    most_frequent = np.array(_unpack_rgb_values(mode),
                              dtype=np.uint8).reshape(3)
     return most_frequent
 
@@ -79,7 +79,7 @@ def _generate_bitmask(n: int = 2, n_bits: int = 8) -> int:
     return all_ones - cancel_bits
 
 
-def _combine_rgb_values(r, g, b):
+def _pack_rgb_values(r, g, b):
     """Combine r, g and b into a single 24 bit value"""
     if isinstance(r, np.ndarray):
         r = r.astype(np.int)
@@ -90,7 +90,7 @@ def _combine_rgb_values(r, g, b):
     return rgb
 
 
-def _separate_rgb_values(rgb):
+def _unpack_rgb_values(rgb):
     """Extract r, g and b from a single 24 bit value"""
     mask = _generate_bitmask(0, 8)  # 8 bit int with all bits set to 1
     b = rgb & mask
