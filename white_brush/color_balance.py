@@ -23,35 +23,36 @@ def balance_color(img: np.ndarray, percentile: float = 0.5) -> np.ndarray:
 
     """
     return cv2.merge(
-        [normalize(channel, percentile) for channel in cv2.split(img)])
+        [_normalize_array(channel, percentile) for channel in cv2.split(img)])
 
 
-def normalize(img_channel: np.ndarray, percentile: float = 1) -> np.ndarray:
+def _normalize_array(arr: np.ndarray,
+                     percentile: float = 1) -> np.ndarray:
     """
     Normalize the values in an image by mapping one of the lowest values
     to 0 and one of the highest to 255. All values in between will be
     redistributed accordingly.
 
     Args:
-        img_channel: One channel of an image with shape (X, Y)
+        arr: One channel of an image with shape (X, Y)
         percentile: At which percentile the lowest / highest value
             will be picked from.
 
     Returns:
         The color balanced channel of shape (X, Y)
     """
-    img_channel = img_channel.astype(np.float)
+    arr = arr.astype(np.float)
 
-    low = np.percentile(img_channel, percentile)
-    high = np.percentile(img_channel, 100 - percentile)
+    low = np.percentile(arr, percentile)
+    high = np.percentile(arr, 100 - percentile)
 
     # map channel values to range 0 - 1
-    img_channel = img_channel - low
-    img_channel /= (high - low)
+    arr = arr - low
+    arr /= (high - low)
 
     # values outside the specified percentile will be < 0 or > 1,
     # therefore set them to 0 or 1 here
-    clipped = np.clip(img_channel, 0, 1)
+    clipped = np.clip(arr, 0, 1)
     # transform to range 0 - 255
     clipped *= 255
 
