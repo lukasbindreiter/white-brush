@@ -12,7 +12,7 @@ White Brush is a tool for enhancing hand-written notes.
 | Lukas   | [![Build Status](https://img.shields.io/travis/lukasbindreiter/white-brush/developer/lukas.svg?style=flat-square)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=assignee%3Alukasbindreiter+is%3Aopen) [![Coverage Status](https://img.shields.io/coveralls/lukasbindreiter/white-brush/developer/lukas.svg?style=flat-square)](https://coveralls.io/github/lukasbindreiter/white-brush?branch=developer%2Flukas) |
 | Daniel   | [![Build Status](https://img.shields.io/travis/lukasbindreiter/white-brush/daniel.svg?style=flat-square)](https://travis-ci.org/lukasbindreiter/white-brush) |[Assigned Issues/Todos](https://github.com/lukasbindreiter/white-brush/issues?q=assignee%3AEthlaron+is%3Aopen) [![Coverage Status](https://img.shields.io/coveralls/lukasbindreiter/white-brush/daniel.svg?style=flat-square)](https://coveralls.io/github/lukasbindreiter/white-brush?branch=daniel) |
 
-
+ 
 ### Usage
 #### As executable  
 ```bash
