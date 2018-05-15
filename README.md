@@ -1,8 +1,8 @@
-# White Brush [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/lukasbindreiter/white-brush/blob/master/LICENSE)
+# White Brush [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/lukasbindreiter/white-brush/blob/master/LICENSE) [![Issue Stats](http://issuestats.com/github/lukasbindreiter/white-brush/badge/pr?style=flat-square)](http://issuestats.com/github/lukasbindreiter/white-brush) [![Issue Stats](http://issuestats.com/github/lukasbindreiter/white-brush/badge/issue?style=flat-square)](http://issuestats.com/github/lukasbindreiter/white-brush)
 
 White Brush is a tool for enhancing hand-written notes.
 
-### Build Status  [![Issue Stats](http://issuestats.com/github/lukasbindreiter/white-brush/badge/pr?style=flat-square)](http://issuestats.com/github/lukasbindreiter/white-brush) [![Issue Stats](http://issuestats.com/github/lukasbindreiter/white-brush/badge/issue?style=flat-square)](http://issuestats.com/github/lukasbindreiter/white-brush)
+### Build Status  
 
 | Branch        | Status        | Information |
 | ------------- | --------------| ------- |
