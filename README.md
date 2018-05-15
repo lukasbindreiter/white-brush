@@ -2,7 +2,7 @@
 
 White Brush is a tool for enhancing hand-written notes.
 
-### Build Status
+### Build Status  [![Issue Stats](http://issuestats.com/github/lukasbindreiter/white-brush/badge/pr?style=flat-square)](http://issuestats.com/github/lukasbindreiter/white-brush) [![Issue Stats](http://issuestats.com/github/lukasbindreiter/white-brush/badge/issue?style=flat-square)](http://issuestats.com/github/lukasbindreiter/white-brush)
 
 | Branch        | Status        | Information |
 | ------------- | --------------| ------- |
