@@ -44,9 +44,10 @@ def hsv_to_rgb(color):
 
 def __convert_color__(color, conversion_code):
     assert color.dtype == np.uint8
-    # color can either be of shape (X, Y, 3) if it is an image
-    # or just shape (3,) if it is a single color
+    # color needs to be of shape (X, Y, 3) for the opencv cvtColor
+    # functions. Therefore if it is not in that shape, reshape it first
+    # and then restore the original shape later on
     orig_shape = color.shape
-    if color.ndim == 1 and color.size == 3:
-        color = color.reshape(1, 1, 3)
+    if color.ndim != 3:
+        color = color.reshape(-1, 1, 3)
     return cv2.cvtColor(color, conversion_code).reshape(*orig_shape)
