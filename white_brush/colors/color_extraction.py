@@ -1,22 +1,69 @@
 import numpy as np
 from scipy import stats as stats
 
+from white_brush.colors.utils import rgb_to_hsv
 
-def extract_background_color(img: np.ndarray) -> np.ndarray:
+
+def hsv_distance_threshold(img: np.ndarray, bg_color,
+                           v_thresh=70, s_thresh=80) -> np.ndarray:
     """
-    Extract the most frequently occurring color in an image
+    Decide which pixels are background pixels based on HSV distance.
+
+    Calculate the difference between each color and the bg_color in the
+    HSV color space and depending on the distances in the V and S
+    channel mark each pixel as background or foreground.
+
+
+
+    Args:
+        img: The image for which to calculate a background mask
+        bg_color: The background color to compare to
+        v_thresh: Threshold for the V channel. If the difference between
+            a color and the background color in the V channel is less
+            than this, and also the same applies to s_thresh and the S
+            channel, than the pixel is marked as belonging to the
+            background.
+        s_thresh: Threshold for the S channel.
+
+    Returns:
+        The calculated background mask. If an element in the mask is
+        True, this means that the corresponding pixel is part of the
+        background. If it is false, the pixel is part of the foreground.
+    """
+    # convert the hsv images to integers in order to avoid
+    # uint8 overflows when calculating the difference later
+    hsv_img = rgb_to_hsv(img).astype(np.int)
+    hsv_bg = rgb_to_hsv(bg_color).astype(np.int)
+
+    # the background is everything that has a difference less than
+    # v_thresh in the v channel and less than s_thresh in the s channel
+    background_mask = np.abs(hsv_img[:, :, 2] - hsv_bg[2]) <= v_thresh
+    background_mask &= np.abs(hsv_img[:, :, 1] - hsv_bg[1]) <= s_thresh
+
+    return background_mask
+
+
+def extract_background_colors(img: np.ndarray, thresh=0.2) -> np.ndarray:
+    """
+    Extract the most frequently occurring colors in an image
 
     Args:
         img: The image of shape (X, Y, 3) for which to extract the
             background color
+        thresh: The threshold in percent that will be used to decide
+            if a certain color is part of the background or not.
+            If a color occurs at least thresh % as often as the most
+            frequent color, it is considered part of the background.
+            The default value is 20%.
 
     Returns:
         R, G, B color values of the background as numpy array of
-        shape (3). It is not guaranteed that the background color
-        actually occurs in the image, since similar colors are grouped
-        together.
+        shape (N, 3). It is not guaranteed that the background colors
+        actually occurs in the image, since the bit depth of the colors
+        is reduced before extracting the most frequent ones.
 
     """
+    assert 0 <= thresh <= 1
     # only use a subset of the colors of the image
     sample = _color_sample(img)
     # reduce bit depth
@@ -24,12 +71,17 @@ def extract_background_color(img: np.ndarray) -> np.ndarray:
     reduced_colors = sample & mask
     # combine r, g and b into one single value
     rgb = _pack_rgb_values(*[reduced_colors[:, i] for i in range(3)])
-    # find the most frequent color (=mode)
-    mode, count = stats.mode(rgb)
+    # find the most frequent colors
+    colors, counts = np.unique(rgb, return_counts=True)
+    # find all the colors that occur at least thresh % as often as
+    # the most frequent color. Those colors are the background colors
+    # of the image
+    most_frequent = counts.max()
+    frequent_mask = (counts / most_frequent) >= thresh
+    bg_colors = colors[frequent_mask]
     # convert back to separate r, g and b
-    most_frequent = np.array(_unpack_rgb_values(mode),
-                             dtype=np.uint8).reshape(3)
-    return most_frequent
+    bg_colors = np.stack(_unpack_rgb_values(bg_colors), axis=1)
+    return bg_colors
 
 
 def _color_sample(img: np.ndarray, p: float = 0.05) -> np.ndarray:
