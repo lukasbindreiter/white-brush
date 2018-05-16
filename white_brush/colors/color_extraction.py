@@ -4,20 +4,26 @@ from scipy import stats as stats
 from white_brush.colors.utils import rgb_to_hsv
 
 
-def hsv_distance_threshold(img: np.ndarray, bg_color,
+def hsv_distance_threshold(img: np.ndarray, bg_colors,
                            v_thresh=70, s_thresh=80) -> np.ndarray:
     """
     Decide which pixels are background pixels based on HSV distance.
 
-    Calculate the difference between each color and the bg_color in the
-    HSV color space and depending on the distances in the V and S
-    channel mark each pixel as background or foreground.
+    Calculate the difference between each color and each of the provided
+    background colors in the HSV color space and depending on the
+    difference in the V and S channel mark each pixel as background or
+    foreground.
 
-
+    If a pixel is marked as background because it is close to only one
+    of the specified bg colors, it will be in the background in the
+    result also. (Results of each bg_color or combined with logical or)
 
     Args:
         img: The image for which to calculate a background mask
-        bg_color: The background color to compare to
+        bg_colors: The background colors to compare to. If only one
+            of these colors are close enough to a pixel in the img to
+            mark that pixel as belonging to background, it will be
+            in the background in the resulting output
         v_thresh: Threshold for the V channel. If the difference between
             a color and the background color in the V channel is less
             than this, and also the same applies to s_thresh and the S
@@ -33,17 +39,22 @@ def hsv_distance_threshold(img: np.ndarray, bg_color,
     # convert the hsv images to integers in order to avoid
     # uint8 overflows when calculating the difference later
     hsv_img = rgb_to_hsv(img).astype(np.int)
-    hsv_bg = rgb_to_hsv(bg_color).astype(np.int)
+    hsv_bgs = rgb_to_hsv(bg_colors).astype(np.int)
 
-    # the background is everything that has a difference less than
-    # v_thresh in the v channel and less than s_thresh in the s channel
-    background_mask = np.abs(hsv_img[:, :, 2] - hsv_bg[2]) <= v_thresh
-    background_mask &= np.abs(hsv_img[:, :, 1] - hsv_bg[1]) <= s_thresh
+    def make_background_mask(hsv_img, hsv_bg):
+        # the background is everything that has a difference less than
+        # v_thresh in the v channel and less than s_thresh in the s channel
+        background_mask = np.abs(hsv_img[:, :, 2] - hsv_bg[2]) <= v_thresh
+        background_mask &= np.abs(hsv_img[:, :, 1] - hsv_bg[1]) <= s_thresh
+        return background_mask
 
-    return background_mask
+    background_masks = [make_background_mask(hsv_img, hsv_bg) for hsv_bg in
+                        hsv_bgs]
+    #return np.logical_or.reduce(background_masks)
+    return background_masks[0]
 
 
-def extract_background_colors(img: np.ndarray, thresh=0.2) -> np.ndarray:
+def extract_background_colors(img: np.ndarray, thresh=0.4) -> np.ndarray:
     """
     Extract the most frequently occurring colors in an image
 
@@ -54,7 +65,7 @@ def extract_background_colors(img: np.ndarray, thresh=0.2) -> np.ndarray:
             if a certain color is part of the background or not.
             If a color occurs at least thresh % as often as the most
             frequent color, it is considered part of the background.
-            The default value is 20%.
+            The default value is 40%.
 
     Returns:
         R, G, B color values of the background as numpy array of
@@ -80,7 +91,8 @@ def extract_background_colors(img: np.ndarray, thresh=0.2) -> np.ndarray:
     frequent_mask = (counts / most_frequent) >= thresh
     bg_colors = colors[frequent_mask]
     # convert back to separate r, g and b
-    bg_colors = np.stack(_unpack_rgb_values(bg_colors), axis=1)
+    r, g, b = _unpack_rgb_values(bg_colors)
+    bg_colors = np.stack([r, g, b], axis=1).astype(np.uint8)
     return bg_colors
 
 
