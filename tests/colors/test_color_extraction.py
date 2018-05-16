@@ -23,9 +23,17 @@ class TestColorExtraction:
         }
 
         for img_name, img in get_test_images():
-            background = color_extraction.extract_background_color(img)
+            # extract a single background color (by setting thresh to 1)
+            background = color_extraction.extract_background_colors(img,
+                                                                    thresh=1)
+
             if img_name in expected_colors:
-                assert_allclose(background, expected_colors[img_name])
+                bg_color = expected_colors[img_name]
+                assert_allclose(background.ravel(), bg_color)
+
+            # make sure multiple background color extraction works as well
+            backgrounds = color_extraction.extract_background_colors(img)
+            assert len(backgrounds) > 1
 
     def test_color_sample(self):
         """Test extracting a representative sample of pixels from an image"""
@@ -82,8 +90,8 @@ class TestColorExtraction:
         (three separate arrays) to a single 24bit representation and back
         """
         rgb = color_extraction._pack_rgb_values(rgb_arr[:, 0],
-                                                   rgb_arr[:, 1],
-                                                   rgb_arr[:, 2])
+                                                rgb_arr[:, 1],
+                                                rgb_arr[:, 2])
         r, g, b = color_extraction._unpack_rgb_values(rgb)
         rgb_back = np.stack([r, g, b], axis=1)
         assert_allclose(rgb_arr, rgb_back)
