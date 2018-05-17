@@ -50,8 +50,21 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors,
 
     background_masks = [make_background_mask(hsv_img, hsv_bg) for hsv_bg in
                         hsv_bgs]
-    #return np.logical_or.reduce(background_masks)
-    return background_masks[0]
+    return np.logical_or.reduce(background_masks)
+
+
+def adaptive_threshold(img: np.ndarray, block_size, min_difference):
+    """
+
+    Args:
+        img:
+        block_size:
+        min_difference:
+
+    Returns:
+
+    """
+
 
 
 def extract_background_colors(img: np.ndarray, thresh=0.4) -> np.ndarray:

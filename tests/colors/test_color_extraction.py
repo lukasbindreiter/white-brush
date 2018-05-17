@@ -17,18 +17,17 @@ class TestColorExtraction:
     def test_hsv_thresholding_with_example_images(self):
         """Test thresholding using the hsv distance method"""
         expected_masked_pixels = {
-            # values don't need to match exactly, just close enough
-            "01.jpg": 561297,
-            "02.jpg": 392720,
-            "03.jpg": 695210,
-            "04_crop_and_rotate.jpg": 1180967,
-            "05_blackboard.jpg": 352704,
-            "06_crop.jpg": 248762,
-            "07_multi_color.jpg": 473420,
-            "08_shadows.jpg": 445508,
-            "09_lightning.jpg": 412695,
-            "10.jpg": 921354,
-            "11.jpg": 1082182
+            "01.png": 561699,
+            "02.png": 392820,
+            "03.png": 695273,
+            "04_crop_and_rotate.png": 1181497,
+            "05_blackboard.png": 436050,
+            "06_crop.png": 826985,
+            "07_multi_color.png": 473495,
+            "08_shadows.png": 658405,
+            "09_lightning.png": 649505,
+            "10.png": 921354,
+            "11.png": 1082182
         }
 
         for name, img in get_test_images():
@@ -36,8 +35,7 @@ class TestColorExtraction:
                 img = balance_color(img)
                 bg_colors = extract_background_colors(img)
                 mask = hsv_distance_threshold(img, bg_colors)
-                diff = abs(mask.sum() - expected_masked_pixels[name])
-                assert diff < 10000
+                assert mask.sum() == expected_masked_pixels[name]
 
     def test_extract_background_color(self):
         """Test the extraction of the background color in an image"""

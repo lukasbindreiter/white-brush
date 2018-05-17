@@ -6,13 +6,14 @@ def rgb_to_hsv(color: np.ndarray) -> np.ndarray:
     """
     Convert a color from the RGB colorspace to the HSV colorspace
 
-    >>> rgb_to_hsv(np.array([10, 20, 30]))
+    >>> rgb_to_hsv(np.array([10, 20, 30], np.uint8))
     array([105, 170, 30])
 
     Args:
         color: Color as numpy array. Can either have shape (X, Y, 3)
-            if it is a whole image, or just have three elements if it
-            is a single color. The dtype of the array needs to be uint8
+            if it is a whole image, (N, 3) if it is a list of colors
+            or just (3) if it is a single color.
+            The dtype of the array needs to be uint8
 
     Returns:
         The converted color in a numpy array the same shape as the
@@ -26,13 +27,14 @@ def hsv_to_rgb(color):
     """
     Convert a color from the HSV colorspace to the RGB colorspace
 
-    >>> hsv_to_rgb(np.array([105, 170, 30]))
+    >>> hsv_to_rgb(np.array([105, 170, 30], np.uint8))
     array([10, 20, 30])
 
     Args:
         color: Color as numpy array. Can either have shape (X, Y, 3)
-            if it is a whole image, or just have three elements if it
-            is a single color. The dtype of the array needs to be uint8
+            if it is a whole image, (N, 3) if it is a list of colors
+            or just (3) if it is a single color.
+            The dtype of the array needs to be uint8
 
     Returns:
         The converted color in a numpy array the same shape as the
@@ -42,12 +44,60 @@ def hsv_to_rgb(color):
     return __convert_color__(color, cv2.COLOR_HSV2RGB)
 
 
-def __convert_color__(color, conversion_code):
+def rgb_to_gray(color: np.ndarray) -> np.ndarray:
+    """
+    Convert a color from the RGB colorspace to a grayscale image
+
+    >>> rgb_to_gray(np.array([34, 35, 36], np.uint8))
+    array([35])
+
+    Args:
+        color: Color as numpy array. Can either have shape (X, Y, 3)
+            if it is a whole image, (N, 3) if it is a list of colors
+            or just (3) if it is a single color.
+            The dtype of the array needs to be uint8
+
+    Returns:
+        The converted color in a numpy array
+
+    """
+    return __convert_color__(color, cv2.COLOR_RGB2GRAY, n_target_channels=1)
+
+
+def gray_to_rgb(color: np.ndarray) -> np.ndarray:
+    """
+    Convert a grayscale color to a RGB image
+    Args:
+        color: Color as numpy array. Can either have shape (X, Y) if
+            it is a whole image, or (N) if it is a list of grayscale
+            colors. In that case, N can also be 1
+
+    Returns:
+        The converted color in a numpy array
+    """
+    return __convert_color__(color, cv2.COLOR_GRAY2RGB, n_src_channels=1)
+
+
+def __convert_color__(color, conversion_code, n_src_channels=3,
+                      n_target_channels=3):
     assert color.dtype == np.uint8
-    # color needs to be of shape (X, Y, 3) for the opencv cvtColor
+    # color needs to be of shape (X, Y, color_values) for the opencv cvtColor
     # functions. Therefore if it is not in that shape, reshape it first
     # and then restore the original shape later on
-    orig_shape = color.shape
-    if color.ndim != 3:
-        color = color.reshape(-1, 1, 3)
-    return cv2.cvtColor(color, conversion_code).reshape(*orig_shape)
+    target_shape = list(color.shape)
+    if n_src_channels == 1 and color.size > 1:
+        target_shape.append(n_target_channels)
+    else:
+        target_shape[-1] = n_target_channels
+
+    if n_src_channels == 1:
+        assert color.ndim <= 2, "Single channel color cannot be 3D"
+    else:
+        # if the input is for example a list of RGB colors,
+        # it will have shape (N, 3) which is two dimensional
+        # cvtColor expects it to be an image, so reshape it to (N, 1, 3)
+        if color.ndim != 3:
+            color = color.reshape(-1, 1, n_src_channels)
+
+    return np.squeeze(
+        cv2.cvtColor(color, conversion_code).reshape(*target_shape))
