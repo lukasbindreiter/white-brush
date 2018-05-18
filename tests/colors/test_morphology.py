@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.testing import assert_allclose
 
-from white_brush.colors.morphology import erode, dilate
+from white_brush.colors.morphology import erode, dilate, smooth
 
 
 class TestMorphology:
@@ -61,8 +61,8 @@ class TestMorphology:
                 """
         input_mask = self._generate_mask_from_str(input)
         expected_mask = self._generate_mask_from_str(expected_output)
-        eroded = dilate(input_mask, 3)
-        assert_allclose(eroded, expected_mask)
+        dilated = dilate(input_mask, 3)
+        assert_allclose(dilated, expected_mask)
         input = """
                 -------
                 --###--
@@ -79,8 +79,35 @@ class TestMorphology:
                 """
         input_mask = self._generate_mask_from_str(input)
         expected_mask = self._generate_mask_from_str(expected_output)
-        eroded = dilate(input_mask, 3)
-        assert_allclose(eroded, expected_mask)
+        dilated = dilate(input_mask, 3)
+        assert_allclose(dilated, expected_mask)
+
+    def test_smoothing(self):
+        input = """
+                --####--------
+                ---####-------
+                ----###-------
+                ---#####------
+                ---####-------
+                ---####-------
+                --#####-------
+                ---####-------
+                """
+        expected_output = """
+                ---####-------
+                ---####-------
+                ---####-------
+                ---####-------
+                ---####-------
+                ---####-------
+                ---####-------
+                ---####-------
+                """
+        input_mask = self._generate_mask_from_str(input)
+        expected_mask = self._generate_mask_from_str(expected_output)
+        smoothed = smooth(input_mask, 3)
+
+        assert_allclose(smoothed, expected_mask)
 
     def _generate_mask_from_str(self, str_mask):
         """
