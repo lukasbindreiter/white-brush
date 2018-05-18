@@ -67,6 +67,10 @@ def rgb_to_gray(color: np.ndarray) -> np.ndarray:
 def gray_to_rgb(color: np.ndarray) -> np.ndarray:
     """
     Convert a grayscale color to a RGB image
+
+    >>> gray_to_rgb(np.array([34], np.uint8))
+    array([34, 34, 34])
+
     Args:
         color: Color as numpy array. Can either have shape (X, Y) if
             it is a whole image, or (N) if it is a list of grayscale

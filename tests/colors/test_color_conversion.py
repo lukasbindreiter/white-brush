@@ -1,10 +1,10 @@
 import numpy as np
-from hypothesis import given, reproduce_failure
+from hypothesis import given
 from hypothesis.extra.numpy import arrays
 from numpy.testing import assert_allclose
 
-from white_brush.colors.utils import rgb_to_hsv, hsv_to_rgb
-from white_brush.colors.utils import rgb_to_gray, gray_to_rgb
+from white_brush.colors.conversion import rgb_to_hsv, hsv_to_rgb
+from white_brush.colors.conversion import rgb_to_gray, gray_to_rgb
 
 
 class TestColorExtraction:

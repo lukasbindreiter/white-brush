@@ -1,25 +1,27 @@
 import numpy as np
-from scipy import stats as stats
+import cv2
 
-from white_brush.colors.utils import rgb_to_hsv
+from white_brush.colors.conversion import rgb_to_hsv, rgb_to_gray
 
 
-def hsv_distance_threshold(img: np.ndarray, bg_colors,
+def hsv_distance_threshold(img: np.ndarray, bg_colors=None,
                            v_thresh=70, s_thresh=80) -> np.ndarray:
     """
-    Decide which pixels are background pixels based on HSV distance.
+    Calculate a foreground mask based on HSV distance.
 
-    Calculate the difference between each color and each of the provided
-    background colors in the HSV color space and depending on the
+    Decide which pixels constitute the foreground by calculating the
+    difference between each pixel and each of the provided
+    background colors in the HSV color space. Depending on the
     difference in the V and S channel mark each pixel as background or
     foreground.
 
     If a pixel is marked as background because it is close to only one
     of the specified bg colors, it will be in the background in the
-    result also. (Results of each bg_color or combined with logical or)
+    result also. (Results of each bg_color are combined with logical or)
 
     Args:
-        img: The image for which to calculate a background mask
+        img: The image for which to calculate a background / foreground
+            mask
         bg_colors: The background colors to compare to. If only one
             of these colors are close enough to a pixel in the img to
             mark that pixel as belonging to background, it will be
@@ -32,13 +34,16 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors,
         s_thresh: Threshold for the S channel.
 
     Returns:
-        The calculated background mask. If an element in the mask is
-        True, this means that the corresponding pixel is part of the
-        background. If it is false, the pixel is part of the foreground.
+        The calculated foreground mask. If an element in the mask is
+        False, this means that the corresponding pixel is part of the
+        background. If it is True, the pixel is part of the foreground.
     """
     # convert the hsv images to integers in order to avoid
     # uint8 overflows when calculating the difference later
     hsv_img = rgb_to_hsv(img).astype(np.int)
+
+    if bg_colors is None:
+        bg_colors = extract_background_colors(img)
     hsv_bgs = rgb_to_hsv(bg_colors).astype(np.int)
 
     def make_background_mask(hsv_img, hsv_bg):
@@ -50,21 +55,37 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors,
 
     background_masks = [make_background_mask(hsv_img, hsv_bg) for hsv_bg in
                         hsv_bgs]
-    return np.logical_or.reduce(background_masks)
+    return ~(np.logical_or.reduce(background_masks))
 
 
-def adaptive_threshold(img: np.ndarray, block_size, min_difference):
+def adaptive_threshold(img: np.ndarray, block_size: int, min_thresh: int):
     """
+    Calculate a foreground mask based on adaptive thresholding.
+
+    Decide which pixels are foreground pixels using the adaptive
+    threshold algorithm.
+    Each pixel is compared to its neighbouring pixels (size of this
+    neighbourhood can be controlled with block_size) and if it has at
+    least a value difference of min_thresh compared to the mean of the
+    neighbourhood it will be considered part of the foreground,
+    otherwise it will be background.
 
     Args:
-        img:
-        block_size:
-        min_difference:
+        img: The image for which to calculate a background mask
+        block_size: size of the neighbourhood around each pixel
+        min_thresh: minimum difference from the mean of the neighbourhood
 
     Returns:
+        The calculated foreground mask. If an element in the mask is
+        False, this means that the corresponding pixel is part of the
+        background. If it is True, the pixel is part of the foreground.
 
     """
-
+    gray = rgb_to_gray(img)
+    thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
+                                   cv2.THRESH_BINARY, block_size, min_thresh)
+    thresh_mask = thresh == 0
+    return thresh_mask
 
 
 def extract_background_colors(img: np.ndarray, thresh=0.4) -> np.ndarray:
@@ -124,6 +145,7 @@ def _color_sample(img: np.ndarray, p: float = 0.05) -> np.ndarray:
 
     Returns:
         Color sample of shape (N, 3)
+
     """
     # combine the X and Y dimension into one, only keep the channels dimension
     ravelled = img.reshape(-1, 3)
