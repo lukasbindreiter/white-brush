@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import cv2
 import numpy as np
 
@@ -80,6 +82,34 @@ def gray_to_rgb(color: np.ndarray) -> np.ndarray:
         The converted color in a numpy array
     """
     return __convert_color__(color, cv2.COLOR_GRAY2RGB, n_src_channels=1)
+
+
+def mask_to_rgb(mask: np.ndarray,
+                bg_color: Tuple[int, int, int] = (255, 255, 255),
+                fg_color: Tuple[int, int, int] = (0, 0, 0)) -> np.ndarray:
+    """
+    Convert a 2D boolean mask into an RGB image
+
+    This is done by replacing the pixels which are False in the mask
+    with the background color and the pixels which are True with the
+    foreground color
+
+    Args:
+        mask: Boolean numpy array of shape (X, Y)
+        bg_color: Color substituted for False values in the mask
+            By default this is white
+        fg_color: Color substituded for True values in the mask
+            By default this is black
+
+    Returns:
+        RGB Image of shape (X, Y, 3)
+    """
+    bg_color = np.asarray(bg_color).astype(np.uint8)
+    fg_color = np.asarray(fg_color).astype(np.uint8)
+    rgb = np.empty(mask.shape + (3,), np.uint8)
+    rgb[:, :] = bg_color
+    rgb[mask] = fg_color
+    return rgb
 
 
 def __convert_color__(color, conversion_code, n_src_channels=3,

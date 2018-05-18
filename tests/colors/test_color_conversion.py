@@ -3,8 +3,7 @@ from hypothesis import given
 from hypothesis.extra.numpy import arrays
 from numpy.testing import assert_allclose
 
-from white_brush.colors.conversion import rgb_to_hsv, hsv_to_rgb
-from white_brush.colors.conversion import rgb_to_gray, gray_to_rgb
+from white_brush.colors.conversion import *
 
 
 class TestColorExtraction:
@@ -72,3 +71,13 @@ class TestColorExtraction:
         gray = rgb_to_gray(rgb)
         assert_allclose(gray, gray_image)
 
+    @given(arrays(shape=(20, 20), dtype=np.bool))
+    def test_colorspace_conversion_mask_to_rgb(self, mask):
+        """
+        Test that converting a mask to rgb replaces the False values
+        with the given background color and the True values with
+        the given foreground color
+        """
+        fg_color = (255, 0, 0) # red
+        rgb = mask_to_rgb(mask, bg_color=[0, 0, 0], fg_color=fg_color)
+        assert mask.sum() == rgb.sum() / sum(fg_color)
