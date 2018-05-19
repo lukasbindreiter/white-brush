@@ -8,7 +8,6 @@ numpy = "*"
 opencv-python = "*"
 sklearn = "*"
 scipy = "*"
-webcolors = "*"
 
 [dev-packages]
 pytest = "*"
