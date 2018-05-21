@@ -206,6 +206,7 @@ class TestEnhanceCommand(unittest.TestCase):
 
         self.assertFalse(mocked_enhance_service.called)
         self.assertEqual(0, mocked_enhance_service.called_counter)
+
     # endregion
 
 
