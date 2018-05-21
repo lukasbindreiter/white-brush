@@ -17,6 +17,8 @@ White Brush is a tool for enhancing hand-written notes.
 ##### Installing
 
 ```bash
+git clone git@github.com:lukasbindreiter/white-brush.git
+cd white-brush
 python setup.py install
 ```
 ##### Executing
@@ -24,17 +26,13 @@ python setup.py install
 ```bash
 white-brush test_images/01.png
 ```
-#### As library
-```python
-import white_brush as wb
-
-# enhance a single image
-wb.enhance("test_images/01.jpg", "01_enhanced.jpg")
-
-# multiple files at once
-files = [("test_images/01.jpg", "01_enhanced.jpg"), ("test_images/02.jpg", "02_enhanced.jpg")]
-wb.enhance_all(files)
+##### Context Menu Entry
+If you are on windows, you can also register the program as context menu entry,
+allowing you to right click on an image to enhance it.
+```bash
+python setup.py register_menu_entry
 ```
+![Example: Usage as context menu entry](https://i.imgur.com/6vTAEKz.gif)
 
 ### Contributing / Development
 1. Checkout the repository
