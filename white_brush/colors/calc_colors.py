@@ -25,5 +25,5 @@ def choose_representative_colors(colors: np.ndarray, n=8):
     model = cluster.KMeans(n_clusters=n)
     labels = model.fit_predict(reshaped_raster)
     palette = model.cluster_centers_
-
-    return (quantized_raster, labels)
+    
+    return (palette, labels)
