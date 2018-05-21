@@ -20,12 +20,11 @@ class RegisterMenuEntryCommand(Command):
                   "on Windows systems!")
             return
 
-        appdata = os.getenv("APPDATA")
-        wb_dir = os.path.join(appdata, "white-brush")
-        os.makedirs(wb_dir, exist_ok=True)
-        bat_name = "white_brush.bat"
-        wb_bat_dest = os.path.join(wb_dir, bat_name)
-        shutil.copy(bat_name, wb_bat_dest)
+        appdata_dir = self._create_appdata_dir()
+        bat = self._copy_to_dir("context_menu_entry/white_brush.bat",
+                                appdata_dir)
+        icon = self._copy_to_dir("context_menu_entry/white_brush.ico",
+                                 appdata_dir)
 
         import winreg as wr
         aReg = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
@@ -34,12 +33,24 @@ class RegisterMenuEntryCommand(Command):
         try:
             newKey = wr.CreateKey(aKey, "Whitebrush")
             wr.SetValue(newKey, "command", wr.REG_SZ,
-                        f"{wb_bat_dest} %1")
+                        f'"{bat}" "%1"')
+            wr.SetValueEx(newKey, "Icon", 0, wr.REG_SZ, f'"{icon}"')
         except EnvironmentError:
             print("Encountered problems writing into the Registry...")
         wr.CloseKey(aKey)
         print("Successfully updated registry")
         wr.CloseKey(aReg)
+
+    def _create_appdata_dir(self):
+        appdata = os.getenv("APPDATA")
+        wb_dir = os.path.join(appdata, "white-brush")
+        os.makedirs(wb_dir, exist_ok=True)
+        return wb_dir
+
+    def _copy_to_dir(self, file, dir):
+        dest_path = os.path.join(dir, os.path.basename(file))
+        shutil.copy(file, dest_path)
+        return dest_path
 
 
 setup(
