@@ -30,8 +30,9 @@ white-brush test_images/01.png
 If you are on windows, you can also register the program as context menu entry,
 allowing you to right click on an image to enhance it.
 ```bash
-python setup.py register
+python setup.py register_menu_entry
 ```
+![Example: Usage as context menu entry](https://i.imgur.com/6vTAEKz.gif)
 
 ### Contributing / Development
 1. Checkout the repository
