@@ -26,4 +26,4 @@ def choose_representative_colors(colors: np.ndarray, n=8):
     labels = model.fit_predict(reshaped_raster)
     palette = model.cluster_centers_
 
-    return (palette, labels)
+    return palette, labels
