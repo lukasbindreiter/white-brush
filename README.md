@@ -14,9 +14,15 @@ White Brush is a tool for enhancing hand-written notes.
 
  
 ### Usage
-#### As executable  
+##### Installing
+
 ```bash
-python -m white_brush test_images/01.jpg 01_enhanced.jpg
+python setup.py install
+```
+##### Executing
+
+```bash
+white-brush test_images/01.png
 ```
 #### As library
 ```python
