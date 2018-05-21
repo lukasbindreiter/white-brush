@@ -15,6 +15,7 @@ pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
 hypothesis = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.6"

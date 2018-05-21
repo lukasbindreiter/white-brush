@@ -190,6 +190,23 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertTrue(mocked_enhance_service.called)
         self.assertEqual(1, mocked_enhance_service.called_counter)
 
+    def test_execute_given_nonexistent_file_should_raise_exception(self):
+        """
+        Given
+            a nonexisting file as parameter
+        When
+            EnhanceCommand.execute() is called
+        Then
+            Enhance service should never be called
+        """
+        mocked_enhance_service = MockedEnhanceService()
+        class_under_test = EnhanceCommand(mocked_enhance_service)
+        nonexistent_files = ["i_do_not_exist.png"]
+        class_under_test.execute(nonexistent_files)
+
+        self.assertFalse(mocked_enhance_service.called)
+        self.assertEqual(0, mocked_enhance_service.called_counter)
+
     # endregion
 
 
