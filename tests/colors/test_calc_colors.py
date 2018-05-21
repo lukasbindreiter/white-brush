@@ -14,10 +14,10 @@ class TestCalcColors:
             [[254, 254, 254], [254, 254, 254], [254, 254, 254], [254, 254, 254], [254, 254, 254], [254, 254, 254],
              [254, 254, 254], [10, 10, 10]])
 
-        expected = np.array(
-            [[255, 255, 254], [0, 0, 10], [0, 0, 10], [255, 255, 254], [255, 255, 254], [255, 255, 254],
-             [255, 255, 254], [255, 255, 254]])
+        expected = np.sort(np.array(
+            [[254, 254, 254], [10, 10, 10], [10, 10, 10], [254, 254, 254], [254, 254, 254], [254, 254, 254],
+             [254, 254, 254], [254, 254, 254]]), axis=0)
 
         (colors, assigned) = calc_colors.choose_representative_colors(input)
-
-        assert np.allclose(expected, colors), "Wrong representative colors are returned."
+        colors_cmp = np.sort(colors, axis=0)
+        assert np.allclose(expected, colors_cmp), "Wrong representative colors are returned."
