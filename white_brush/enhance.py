@@ -54,4 +54,5 @@ class ImageEnhancer:
 
 
 def enhance(img: np.ndarray) -> np.ndarray:
+    # TODO: accept configuration parameters
     return ImageEnhancer().enhance(img)

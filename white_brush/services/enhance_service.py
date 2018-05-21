@@ -3,9 +3,6 @@ from white_brush.enhance import enhance
 
 
 class EnhanceService:
-    def __init__(self):
-        self.io = io
-
     def enhance_file(self, input_file_name, output_file_name,
                      color_configuration):
         """
