@@ -20,18 +20,10 @@ def choose_representative_colors(colors: np.ndarray, n=8):
         colors is used.
 
     """
-    model = cluster.k_means(colors, n)
-    colors = model[0]
-    colors = colors.transpose()
+    width, depth = colors.shape
+    reshaped_raster = np.reshape(colors, (width, depth))
+    model = cluster.KMeans(n_clusters=n)
+    labels = model.fit_predict(reshaped_raster)
+    palette = model.cluster_centers_
 
-    for x in range(0, 2):
-        minvalue = min(colors[x])
-        maxvalue = max(colors[x])
-
-        if maxvalue - minvalue != 0:
-            colors[x] = (colors[x] - minvalue) / (maxvalue - minvalue) * 255
-
-    colors = colors.transpose()
-
-    pixelAssignments = model[1]
-    return (colors, pixelAssignments)
+    return (quantized_raster, labels)
