@@ -6,7 +6,8 @@ RUN pip install \
     numpy \
     matplotlib \
     scipy \
-    sklearn
+    sklearn \
+    webcolors
 
 RUN pip install ipywidgets && jupyter nbextension enable --py widgetsnbextension
 

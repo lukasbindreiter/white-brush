@@ -1,6 +1,8 @@
 from sklearn import cluster
 import numpy as np
 
+from white_brush.colors.color_balance import balance_color
+
 
 def choose_representative_colors(colors: np.ndarray, n=8):
     """
@@ -25,5 +27,5 @@ def choose_representative_colors(colors: np.ndarray, n=8):
     model = cluster.KMeans(n_clusters=n)
     labels = model.fit_predict(reshaped_raster)
     palette = model.cluster_centers_
-
-    return palette, labels
+    balanced_palette = balance_color(palette)
+    return balanced_palette, labels
