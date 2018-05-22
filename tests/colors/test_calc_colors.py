@@ -15,8 +15,8 @@ class TestCalcColors:
              [254, 254, 254], [10, 10, 10]])
 
         expected = np.sort(np.array(
-            [[254, 254, 254], [10, 10, 10], [10, 10, 10], [254, 254, 254], [254, 254, 254], [254, 254, 254],
-             [254, 254, 254], [254, 254, 254]]), axis=0)
+            [[255, 255, 255], [0, 0, 0], [0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255],
+             [255, 255, 255], [255, 255, 255]]), axis=0)
 
         (colors, assigned) = calc_colors.choose_representative_colors(input)
         colors_cmp = np.sort(colors, axis=0)

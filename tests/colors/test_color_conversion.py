@@ -3,6 +3,7 @@ from hypothesis import given
 from hypothesis.extra.numpy import arrays
 from numpy.testing import assert_allclose
 
+from tests.resources import get_test_image
 from white_brush.colors.conversion import *
 
 
@@ -78,6 +79,17 @@ class TestColorExtraction:
         with the given background color and the True values with
         the given foreground color
         """
-        fg_color = (255, 0, 0) # red
+        fg_color = (255, 0, 0)  # red
         rgb = mask_to_rgb(mask, bg_color=[0, 0, 0], fg_color=fg_color)
         assert mask.sum() == rgb.sum() / sum(fg_color)
+
+    def test_colorspace_conversion_mask_to_rgb_fg_colors(self):
+        img_name, img = get_test_image()
+        mask = np.empty(img.shape[:2], dtype=np.bool)
+        mask[:] = False
+        mask[50:100, 100:150] = True
+        out_img = mask_to_rgb_with_fg_colors_from_image(mask, (255, 255, 255),
+                                                        img)
+        assert out_img.shape == img.shape
+        assert np.all(out_img[~mask] == 255)
+

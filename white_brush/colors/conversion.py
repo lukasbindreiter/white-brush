@@ -3,6 +3,9 @@ from typing import Tuple
 import cv2
 import numpy as np
 
+from white_brush.colors.calc_colors import choose_representative_colors
+from white_brush.colors.utils import _generate_bitmask
+
 
 def rgb_to_hsv(color: np.ndarray) -> np.ndarray:
     """
@@ -110,6 +113,38 @@ def mask_to_rgb(mask: np.ndarray,
     rgb[:, :] = bg_color
     rgb[mask] = fg_color
     return rgb
+
+
+def mask_to_rgb_with_fg_colors_from_image(mask: np.ndarray,
+                                          bg_color: Tuple[int, int, int],
+                                          fg_color_img: np.ndarray) -> np.ndarray:
+    """
+    Convert a 2d boolean mask into an RGB image
+
+    This is done by replacing the pixels which are False in the mask
+    with the background color.
+    The colors of all other pixels which are True are grouped together
+    and then eight representative colors for these foreground colors
+    are calculated, each foreground pixel is then assigned to one of
+    these eight colors.
+
+    Args:
+        mask: Boolean numpy array of shape (X, Y)
+        bg_color: Color substituted for False values in the mask
+        fg_color_img: The image of shape (X, Y, 3) where the foreground
+            colors are taken from
+
+    Returns:
+        RGB Image of shape (X, Y, 3)
+    """
+    assert mask.shape == fg_color_img.shape[:2]
+    colors = fg_color_img[mask]
+    colors &= _generate_bitmask(2, 8)
+    rep_colors, color_mapping = choose_representative_colors(colors)
+    out_img = np.empty(fg_color_img.shape, np.uint8)
+    out_img[~mask, :] = bg_color
+    out_img[mask] = rep_colors[color_mapping]
+    return out_img
 
 
 def __convert_color__(color, conversion_code, n_src_channels=3,

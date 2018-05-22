@@ -1,12 +1,8 @@
-import numpy as np
-from hypothesis import given, assume
-from hypothesis.extra.numpy import arrays
-from hypothesis.strategies import integers
 from numpy.testing import assert_allclose
 
+import white_brush.colors.color_extraction as ce
 from tests.resources import *
 from white_brush.colors.color_balance import balance_color
-import white_brush.colors.color_extraction as ce
 
 
 class TestColorExtraction:
@@ -75,63 +71,3 @@ class TestColorExtraction:
             assert backgrounds.ndim == 2
             assert backgrounds.shape[1] == 3
 
-    def test_color_sample(self):
-        """Test extracting a representative sample of pixels from an image"""
-        for img_name, img in get_test_images():
-            sample05 = ce._color_sample(img, p=0.05)
-            assert sample05.size < (img.size // 20) + 5
-            sample50 = ce._color_sample(img, p=0.5)
-            assert sample50.size < (img.size // 2) + 5
-            sample20 = ce._color_sample(img, p=0.2)
-            assert sample20.size < (img.size // 5) + 5
-
-    def test_bitmask(self):
-        """Test creating a value that can be used to mask specific bits"""
-
-        def int_to_binary_str(x: int) -> str:
-            return "{:b}".format(x)
-
-        mask = ce._generate_bitmask(2, 8)
-        assert int_to_binary_str(mask) == "11111100"
-
-        mask = ce._generate_bitmask(0, 8)
-        assert int_to_binary_str(mask) == "11111111"
-
-        mask = ce._generate_bitmask(4, 8)
-        assert int_to_binary_str(mask) == "11110000"
-
-        mask = ce._generate_bitmask(4, 16)
-        assert int_to_binary_str(mask) == "1111111111110000"
-
-    @given(integers(0, 255), integers(0, 255), integers(0, 255))
-    def test_pack_rgb_values(self, r, g, b):
-        """
-        Test converting between a color in r, g, b format
-        (three separate integers) to a single 24bit representation and back
-        """
-        rgb = ce._pack_rgb_values(r, g, b)
-        assert ce._unpack_rgb_values(rgb) == (r, g, b)
-
-    @given(arrays(np.uint8, (2, 3)))
-    def test_pack_rgb_uniqueness(self, colors):
-        """
-        Assert that converting two different colors from r, g, b format
-        (three separate integers) to a single 24bit representation
-        results in two different values."""
-        assume(np.any(colors[0] != colors[1]))
-        c1 = ce._pack_rgb_values(*colors[0])
-        c2 = ce._pack_rgb_values(*colors[1])
-        assert c1 != c2
-
-    @given(arrays(np.uint8, (100, 3)))
-    def test_pack_rgb_values_array(self, rgb_arr):
-        """
-        Test converting between many colors in r, g, b format
-        (three separate arrays) to a single 24bit representation and back
-        """
-        rgb = ce._pack_rgb_values(rgb_arr[:, 0],
-                                  rgb_arr[:, 1],
-                                  rgb_arr[:, 2])
-        r, g, b = ce._unpack_rgb_values(rgb)
-        rgb_back = np.stack([r, g, b], axis=1)
-        assert_allclose(rgb_arr, rgb_back)
