@@ -72,7 +72,8 @@ class TestColorExtraction:
 
             # make sure multiple background color extraction works as well
             backgrounds = ce.extract_background_colors(img)
-            assert len(backgrounds) > 1
+            assert backgrounds.ndim == 2
+            assert backgrounds.shape[1] == 3
 
     def test_color_sample(self):
         """Test extracting a representative sample of pixels from an image"""
