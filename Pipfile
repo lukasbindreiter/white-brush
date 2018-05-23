@@ -8,12 +8,14 @@ numpy = "*"
 opencv-python = "*"
 sklearn = "*"
 scipy = "*"
+webcolors = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
 hypothesis = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.6"

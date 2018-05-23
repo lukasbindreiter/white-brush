@@ -5,3 +5,7 @@
 .coverage
 .ipynb_checkpoints/
 .hypothesis
+build/
+white_brush.egg-info/
+dist/
+htmlcov/

@@ -1,7 +1,8 @@
 import unittest
 
 from white_brush.commands.template_command import TemplateCommand
-from white_brush.entities.enhancement_configuration import EnhancementConfiguration
+from white_brush.entities.enhancement_configuration import \
+    EnhancementConfiguration
 
 
 class TestTemplateCommand(unittest.TestCase):
@@ -19,18 +20,26 @@ class TestTemplateCommand(unittest.TestCase):
         """
         # Arrange
         class_under_test = TemplateCommand()
-        template = "wHitEboaRd"
-        enhance_configuration = EnhancementConfiguration()
+        test_cases = [
+            (("whiteboard", "wHitEboaRd", "bw", "blackwhite"),
+             ("#000000", "#FFFFFF")),
+            (("note", "postit"),
+             ("#040b33", "#F7EA5E"))
+        ]
+        for test_case in test_cases:
+            enhance_configuration = EnhancementConfiguration()
 
-        expected_foreground = "#000000"
-        expected_background = "#FFFFFF"
+            expected_foreground, expected_background = test_case[1]
 
-        # Act
-        class_under_test.execute(template, enhance_configuration)
+            for template in test_case[0]:
+                # Act
+                class_under_test.execute(template, enhance_configuration)
 
-        # Assert
-        self.assertEqual(expected_foreground, enhance_configuration.foreground_color)
-        self.assertEqual(expected_background, enhance_configuration.background_color)
+                # Assert
+                self.assertEqual(expected_foreground,
+                                 enhance_configuration.foreground_color)
+                self.assertEqual(expected_background,
+                                 enhance_configuration.background_color)
 
     def test_execute_given_no_matching_template_should_keep_default(self):
         """
@@ -46,15 +55,17 @@ class TestTemplateCommand(unittest.TestCase):
         template = "MultiMedia"
         enhance_configuration = EnhancementConfiguration()
 
-        expected_foreground = "#default"
-        expected_background = "#default"
+        expected_foreground = None
+        expected_background = None
 
         # Act
         class_under_test.execute(template, enhance_configuration)
 
         # Assert
-        self.assertEqual(expected_foreground, enhance_configuration.foreground_color)
-        self.assertEqual(expected_background, enhance_configuration.background_color)
+        self.assertEqual(expected_foreground,
+                         enhance_configuration.foreground_color)
+        self.assertEqual(expected_background,
+                         enhance_configuration.background_color)
 
     # endregion
 
