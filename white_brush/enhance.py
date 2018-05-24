@@ -2,7 +2,7 @@ import numpy as np
 
 from white_brush.colors.color_balance import balance_color
 from white_brush.colors.color_extraction import hsv_distance_threshold, \
-    adaptive_threshold
+    adaptive_threshold, eroded_background_difference_threshold
 from white_brush.colors.conversion import mask_to_rgb, \
     mask_to_rgb_with_fg_colors_from_image
 from white_brush.colors.morphology import dilate, erode, smooth
@@ -54,19 +54,7 @@ class ImageEnhancer:
             of the background. If it is True, the pixel is part of the
             foreground.
         """
-        # Perform hsv thresholding
-        hsv_thresh = hsv_distance_threshold(img)
-
-        # Also perform adaptive thresholding
-        adaptive_thresh = adaptive_threshold(img, 17, 3)
-
-        # Now combine the two threshold results
-        hsv_thresh_dilated = dilate(hsv_thresh, 5)
-        adaptive_thresh_dilated = dilate(adaptive_thresh, 3)
-        combined_thresh = hsv_thresh_dilated & adaptive_thresh_dilated
-        combined_thresh = erode(combined_thresh, 3, kernel_shape="ellipse")
-        combined_thresh = smooth(combined_thresh, 3)
-        return combined_thresh
+        return eroded_background_difference_threshold(img)
 
     def _apply_colors(self, foreground_mask: np.ndarray,
                       orig_img: np.ndarray,
