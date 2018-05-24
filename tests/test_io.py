@@ -23,7 +23,7 @@ class TestIO:
             "02.png": 191207327,
             "03.png": 330462814,
             "04_crop_and_rotate.png": 568133589,
-            "05_blackboard.png": 128896018,
+            "05_blackboard.png": 105905789,
             "06_crop.png": 305926340,
             "07_multi_color.png": 264732912,
             "08_shadows.png": 266218455,
