@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 
 
-def balance_color(img: np.ndarray, percentile: float = 0.5) -> np.ndarray:
+def balance_color(img: np.ndarray, percentile: float = 0.5,
+                  separate_channels: bool = True) -> np.ndarray:
     """
     Balance the color in an image by setting the lowest value of each
     channel to zero and the highest to 255.
@@ -17,13 +18,19 @@ def balance_color(img: np.ndarray, percentile: float = 0.5) -> np.ndarray:
             color balancing
         percentile: At which percentile in each channel the
             lowest / highest value will be picked from.
+        separate_channels: Flag which indicates whether the color
+        balancing should be performed on each channel separately or
+        on all channels at once
 
     Returns:
         The color balanced image of shape (X, Y, 3)
 
     """
-    return cv2.merge(
-        [_normalize_array(channel, percentile) for channel in cv2.split(img)])
+    if separate_channels:
+        return cv2.merge([_normalize_array(channel, percentile)
+                          for channel in cv2.split(img)])
+    else:
+        return _normalize_array(img, percentile)
 
 
 def _normalize_array(arr: np.ndarray,

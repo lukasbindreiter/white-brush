@@ -1,6 +1,9 @@
 import numpy as np
 import cv2
 
+from white_brush.colors.color_balance import balance_color
+from white_brush.colors.morphology import dilate, erode
+
 from white_brush.colors.conversion import rgb_to_hsv, rgb_to_gray
 from white_brush.colors.utils import _color_sample, _generate_bitmask, \
     _pack_rgb_values, _unpack_rgb_values
@@ -58,6 +61,26 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors=None,
     background_masks = [make_background_mask(hsv_img, hsv_bg) for hsv_bg in
                         hsv_bgs]
     return ~(np.logical_or.reduce(background_masks))
+
+
+def eroded_background_difference_threshold(img: np.ndarray,
+                                           kernel_size: int = 21,
+                                           blur_kernel_size: int = 7):
+    gray_img = rgb_to_gray(img)
+    # we want the background black, the foreground white
+    # if that is not the case, flip black and white
+    if np.median(gray_img) > 80:
+        gray_img = 255 - gray_img
+
+    blurred = cv2.medianBlur(gray_img, blur_kernel_size)
+
+    background = erode(blurred, kernel_size)
+    # calculate difference as integer, otherwise uint8 overflow will occurr
+    diff = gray_img.astype(np.int) - background.astype(np.int)
+    diff = balance_color(diff, percentile=1, separate_channels=False)
+    _, otsu = cv2.threshold(diff, 0, 255,
+                            cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    return otsu == 255
 
 
 def adaptive_threshold(img: np.ndarray, block_size: int, min_thresh: int):
