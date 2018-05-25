@@ -56,7 +56,7 @@ class TestEnhanceService:
         enhance_service.io = mock_io
 
         service = enhance_service.EnhanceService()
-        service.enhance_file("input.jpg", "output.jpg", ColorConfiguration())
+        service.enhance_file("input.jpg", "output.jpg", 0, ColorConfiguration())
 
         mock_io.read_image.assert_called_with("input.jpg")
         mock_io.write_image.assert_called_once()
