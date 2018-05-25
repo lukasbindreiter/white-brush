@@ -207,6 +207,37 @@ class TestEnhanceCommand(unittest.TestCase):
         self.assertFalse(mocked_enhance_service.called)
         self.assertEqual(0, mocked_enhance_service.called_counter)
 
+    def test_execute_given_rotation_value_should_call_service_with(self):
+        """
+        Given
+            a file and rotation as parameter
+        When
+            EnhanceCommand.execute() is called
+        Then
+            Enhance service should be called with correct rotation.
+        """
+        # Arrange
+        files = ['../.pytest_cache/testfile5.png']
+        mocked_enhance_service = MockedEnhanceService()
+        class_under_test = EnhanceCommand(mocked_enhance_service)
+        enhance_configuration = EnhancementConfiguration()
+        enhance_configuration.rotation = 180
+        expected_rotation = 180
+
+        # Act
+        pathlib.Path("../.pytest_cache").mkdir(parents=True, exist_ok=True)
+        f = open("../.pytest_cache/testfile5_brushed.png", "w+")
+        f.write("Hello World")
+        f.close()
+        f = open("../.pytest_cache/testfile5.png", "w+")
+        f.write("Hello World")
+        f.close()
+        class_under_test.execute(files, enhance_configuration)
+
+        # Assert
+        self.assertTrue(mocked_enhance_service.called)
+        self.assertEqual(expected_rotation, mocked_enhance_service.rotation)
+
     # endregion
 
 
@@ -216,11 +247,13 @@ class MockedEnhanceService:
     def __init__(self):
         self.called = False
         self.called_counter = 0
+        self.rotation = 0
         self.called_color_configuration = ColorConfiguration()
         self.same_file_name_amount = 0
 
-    def enhance_file(self, input_file_name, output_file_name, color_configuration):
+    def enhance_file(self, input_file_name, output_file_name, rotation, color_configuration):
         self.called = True
+        self.rotation = rotation
         self.called_counter += 1
         self.called_color_configuration = color_configuration
         if input_file_name == output_file_name:

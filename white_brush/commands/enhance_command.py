@@ -89,7 +89,7 @@ class EnhanceCommand:
 
         print("Enhancing '" + os.path.basename(
             source_file) + "' to '" + os.path.basename(target_file) + "'.")
-        self.file_enhance_service.enhance_file(source_file, target_file,
+        self.file_enhance_service.enhance_file(source_file, target_file, enhance_configuration.rotation,
                                                ColorConfiguration(
                                                    enhance_configuration.foreground_color,
                                                    enhance_configuration.background_color))

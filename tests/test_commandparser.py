@@ -21,7 +21,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush cookie.png strange_image.png masterPiece.png".split(' ')
 
         # Act
@@ -45,7 +46,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush".split(' ')
 
         # Act
@@ -67,7 +69,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush --recursive cookie.png strange_image.png".split(' ')
 
         # Act
@@ -91,7 +94,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush --convert cookie.png strange_image.png".split(' ')
 
         # Act
@@ -115,7 +119,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush --mask {name}superfancyimage{extension} cookie.png".split(' ')
         expected = "{name}superfancyimage{extension}"
 
@@ -140,7 +145,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush --background #813A3A cookie.png".split(' ')
         expected = "#813A3A"
 
@@ -165,7 +171,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush --foreground #728599 cookie.png".split(' ')
         expected = "#728599"
 
@@ -190,7 +197,8 @@ class TestCommandParser(unittest.TestCase):
         # Arrange
         mocked_enhance_command = MockedFileEnhanceCommand()
         mocked_template_command = MockedTemplateCommand()
-        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command)
+        mocked_rotation_command = MockedRotationCommand()
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
         args = "whitebrush --template blackboard cookie.png strange_image.png".split(' ')
 
         # Act
@@ -199,6 +207,56 @@ class TestCommandParser(unittest.TestCase):
 
         # Assert
         self.assertTrue(mocked_template_command.called)
+        self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
+
+    def test_parse_args_given_files_with_clockwise_tag_should_call_RotationCommand(self):
+        """
+             Given
+                 valid file command parameters and --cw 90
+             When
+                 CommandParser.parse_args() is called
+             Then
+                 RotationCommand should be called.
+             """
+        # Arrange
+        mocked_enhance_command = MockedFileEnhanceCommand()
+        mocked_template_command = MockedTemplateCommand()
+        mocked_rotation_command = MockedRotationCommand()
+
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
+        args = "whitebrush cookie.png strange_image.png -cw 90".split(' ')
+
+        # Act
+        sys.argv = args
+        class_under_test.parse_args()
+
+        # Assert
+        self.assertTrue(mocked_rotation_command.called)
+        self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
+
+    def test_parse_args_given_files_with_counterclockwise_tag_should_call_RotationCommand(self):
+        """
+             Given
+                 valid file command parameters and --ccw 90
+             When
+                 CommandParser.parse_args() is called
+             Then
+                 RotationCommand should be called.
+             """
+        # Arrange
+        mocked_enhance_command = MockedFileEnhanceCommand()
+        mocked_template_command = MockedTemplateCommand()
+        mocked_rotation_command = MockedRotationCommand()
+
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
+        args = "whitebrush cookie.png strange_image.png -ccw 90".split(' ')
+
+        # Act
+        sys.argv = args
+        class_under_test.parse_args()
+
+        # Assert
+        self.assertTrue(mocked_rotation_command.called)
         self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
 
     # endregion
@@ -223,6 +281,14 @@ class MockedTemplateCommand:
         self.called = False
 
     def execute(self, template, enhance_configuration=EnhancementConfiguration()):
+        self.called = True
+
+
+class MockedRotationCommand:
+    def __init__(self):
+        self.called = False
+
+    def execute(self, rotation: str, counter_clock_wise: bool, enhance_configuration=EnhancementConfiguration()):
         self.called = True
 
 
