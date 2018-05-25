@@ -234,6 +234,31 @@ class TestCommandParser(unittest.TestCase):
         self.assertTrue(mocked_rotation_command.called)
         self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
 
+    def test_parse_args_given_files_with_counterclockwise_tag_should_call_RotationCommand(self):
+        """
+             Given
+                 valid file command parameters and --ccw 90
+             When
+                 CommandParser.parse_args() is called
+             Then
+                 RotationCommand should be called.
+             """
+        # Arrange
+        mocked_enhance_command = MockedFileEnhanceCommand()
+        mocked_template_command = MockedTemplateCommand()
+        mocked_rotation_command = MockedRotationCommand()
+
+        class_under_test = CommandParser(mocked_enhance_command, mocked_template_command, mocked_rotation_command)
+        args = "whitebrush cookie.png strange_image.png -ccw 90".split(' ')
+
+        # Act
+        sys.argv = args
+        class_under_test.parse_args()
+
+        # Assert
+        self.assertTrue(mocked_rotation_command.called)
+        self.assertEqual(2, mocked_enhance_command.amount_of_processed_files)
+
     # endregion
 
 
