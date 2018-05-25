@@ -35,7 +35,7 @@ def get_test_images() -> Iterator[Tuple[str, np.ndarray]]:
         Generator over all images in the `test_images` directory
 
     """
-    for image in os.listdir("test_images"):
+    for image in os.listdir("../test_images"):
         if image.startswith("."):
             continue
-        yield image, read_image(os.path.join("test_images", image))
+        yield image, read_image(os.path.join("../test_images", image))

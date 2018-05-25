@@ -4,16 +4,18 @@ from white_brush.entities.enhancement_configuration import EnhancementConfigurat
 
 
 class CommandParser:
-    def __init__(self, enhance_command, template_command):
+    def __init__(self, enhance_command, template_command, rotation_command):
         """
         Creates a new CommandParser with the enhance_command and template_command as dependency.
 
         Args:
             enhance_command: command executing the enhancement process.
             template_command: command matching the template to the color codes
+            rotation_command: command matching the rotation degrees
         """
         self.enhance_command = enhance_command
         self.template_command = template_command
+        self.rotation_command = rotation_command
 
     def parse_args(self):
         """
@@ -39,6 +41,10 @@ class CommandParser:
                             help="Uses the given HTML Color code as foreground color.")
         parser.add_argument("-b", "--background",
                             help="Uses the given HTML Color code as background color.")
+        parser.add_argument("-cw", "--clockwise",
+                            help="Uses the given degree to rotate the target file clockwise. Degrees have to be divisible by 90.")
+        parser.add_argument("-ccw", "--counterclockwise",
+                            help="Uses the given degree to rotate the target file counterclockwise. Degrees have to be divisible by 90.")
         parser.add_argument("-t", "--template",
                             help="Uses the chosen template color codes for conversion. Templates: whiteboard, blackboard, note.")
 
@@ -54,6 +60,10 @@ class CommandParser:
             enhancement_configuration.background_color = args.background
         if args.foreground:
             enhancement_configuration.foreground_color = args.foreground
+        if args.clockwise:
+            self.rotation_command.execute(args.clockwise, False, enhancement_configuration)
+        if args.counterclockwise:
+            self.rotation_command.execute(args.counterclockwise, True, enhancement_configuration)
         if args.template:
             self.template_command.execute(args.template, enhancement_configuration)
 
