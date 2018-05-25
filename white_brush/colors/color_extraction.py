@@ -49,7 +49,7 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors=None,
 
     if bg_colors is None:
         bg_colors = extract_background_colors(img)
-    hsv_bgs = rgb_to_hsv(bg_colors).astype(np.int)
+    hsv_bgs = rgb_to_hsv(bg_colors).astype(np.int).reshape(*bg_colors.shape)
 
     def make_background_mask(hsv_img, hsv_bg):
         # the background is everything that has a difference less than
@@ -58,9 +58,30 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors=None,
         background_mask &= np.abs(hsv_img[:, :, 1] - hsv_bg[1]) <= s_thresh
         return background_mask
 
+    print(hsv_bgs)
     background_masks = [make_background_mask(hsv_img, hsv_bg) for hsv_bg in
                         hsv_bgs]
     return ~(np.logical_or.reduce(background_masks))
+
+
+def background_difference_image(img: np.ndarray,
+                                kernel_size: int = 21,
+                                blur_kernel_size: int = 7):
+    if img.ndim == 3:
+        img = rgb_to_gray(img)
+    # we want the background black, the foreground white
+    # if that is not the case, flip black and white
+    if np.median(img) > 80:
+        img = 255 - img
+
+    blurred = cv2.medianBlur(img, blur_kernel_size)
+
+    background = erode(blurred, kernel_size)
+    # calculate difference as integer, otherwise uint8 overflow will occurr
+    diff = img.astype(np.int) - background.astype(np.int)
+    diff = balance_color(diff, percentile=1, separate_channels=False)
+    diff = dilate(erode(diff, 3), 3)
+    return 255 - diff
 
 
 def eroded_background_difference_threshold(img: np.ndarray,
@@ -78,6 +99,8 @@ def eroded_background_difference_threshold(img: np.ndarray,
     # calculate difference as integer, otherwise uint8 overflow will occurr
     diff = gray_img.astype(np.int) - background.astype(np.int)
     diff = balance_color(diff, percentile=1, separate_channels=False)
+    diff = dilate(erode(diff, 3), 3)
+    return diff
     _, otsu = cv2.threshold(diff, 0, 255,
                             cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return otsu == 255
@@ -106,11 +129,26 @@ def adaptive_threshold(img: np.ndarray, block_size: int, min_thresh: int):
         background. If it is True, the pixel is part of the foreground.
 
     """
-    gray = rgb_to_gray(img)
-    thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
+    if img.ndim == 3:
+        img = rgb_to_gray(img)
+
+    # we want the background white, the foreground black
+    # if that is not the case, flip black and white
+    if np.median(img) < 100:
+        img = 255 - img
+
+    thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                    cv2.THRESH_BINARY, block_size, min_thresh)
     thresh_mask = thresh == 0
     return thresh_mask
+
+
+def otsu_threshold(img: np.ndarray):
+    if img.ndim == 3:
+        img = rgb_to_gray(img)
+    _, otsu = cv2.threshold(img, 0, 255,
+                            cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    return otsu == 0
 
 
 def extract_background_colors(img: np.ndarray, thresh=0.4) -> np.ndarray:

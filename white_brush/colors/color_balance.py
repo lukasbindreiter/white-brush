@@ -26,7 +26,7 @@ def balance_color(img: np.ndarray, percentile: float = 0.5,
         The color balanced image of shape (X, Y, 3)
 
     """
-    if separate_channels:
+    if img.ndim == 3 and separate_channels:
         return cv2.merge([_normalize_array(channel, percentile)
                           for channel in cv2.split(img)])
     else:
