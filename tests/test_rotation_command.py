@@ -135,6 +135,27 @@ class TestRotationCommand(unittest.TestCase):
         # Assert
         self.assertEqual(expected_rotation, enhance_configuration.rotation)
 
+    def test_execute_incorrectly_formatted_rotation_should_not_set_rotation(self):
+        """
+        Given
+            a incorrectly formatted rotation
+        When
+            RotationCommand.execute() is called
+        Then
+            the configuration should not be filled with the rotation.
+        """
+        # Arrange
+        class_under_test = RotationCommand()
+        rotation = "kekse729"
+        enhance_configuration = EnhancementConfiguration()
+        expected_rotation = 0
+
+        # Act
+        class_under_test.execute(rotation, False, enhance_configuration)
+
+        # Assert
+        self.assertEqual(expected_rotation, enhance_configuration.rotation)
+
     # endregion
 
 
