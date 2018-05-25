@@ -6,6 +6,7 @@ from white_brush.colors.color_extraction import hsv_distance_threshold, \
     background_difference_image, otsu_threshold
 from white_brush.colors.conversion import mask_to_rgb, \
     mask_to_rgb_with_fg_colors_from_image
+from white_brush.colors.crop_and_rotate import rotate
 from white_brush.colors.morphology import dilate, erode, smooth
 from white_brush.colors.utils import parse_color
 from white_brush.entities.color_configuration import ColorConfiguration
@@ -13,8 +14,9 @@ from white_brush.transform import resize_if
 
 
 class ImageEnhancer:
-    def __init__(self, color_config: ColorConfiguration):
+    def __init__(self, color_config: ColorConfiguration, rotation: int):
         self.color_config = color_config
+        self.rotation = rotation
 
     def enhance(self, img: np.ndarray) -> np.ndarray:
         img = self._transform(img)
@@ -30,6 +32,7 @@ class ImageEnhancer:
         - Resize the image if it is too large (>1500 pixels in width or
         height)
         """
+        img = rotate(img, self.rotation)
         return resize_if(img, 1000, 1500)
 
     def _preprocess(self, img: np.ndarray) -> np.ndarray:
@@ -93,5 +96,5 @@ class ImageEnhancer:
                                fg_color=fg_color)
 
 
-def enhance(img: np.ndarray, config: ColorConfiguration) -> np.ndarray:
-    return ImageEnhancer(config).enhance(img)
+def enhance(img: np.ndarray, config: ColorConfiguration, rotation: int = 0) -> np.ndarray:
+    return ImageEnhancer(config, rotation).enhance(img)

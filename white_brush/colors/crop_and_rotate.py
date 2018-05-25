@@ -1,6 +1,15 @@
 import numpy as np
 import cv2
 
+
+def rotate(img: np.ndarray, degree: int):
+    if degree == 0:
+        return img
+    
+    degree = (degree + 360) % 360
+    return np.rot90(img, k=(4 - degree) // 90)
+
+
 def four_point_transform(image: np.ndarray, rectangle_coords):
     """
     Calculate a warped image based on 4 given points
@@ -43,7 +52,10 @@ def four_point_transform(image: np.ndarray, rectangle_coords):
         [0, image.shape[0] - 1]], dtype="float32")
     """
 
-    perspective_transformation_matrix = cv2.getPerspectiveTransform(rectangle_coords, destination_image)
-    warped_image = cv2.warpPerspective(image, perspective_transformation_matrix, (max_width, max_height))
+    perspective_transformation_matrix = cv2.getPerspectiveTransform(
+        rectangle_coords, destination_image)
+    warped_image = cv2.warpPerspective(image,
+                                       perspective_transformation_matrix,
+                                       (max_width, max_height))
 
     return warped_image
