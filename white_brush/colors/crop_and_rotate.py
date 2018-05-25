@@ -3,9 +3,21 @@ import cv2
 
 
 def rotate(img: np.ndarray, degree: int):
+    """
+    Rotate an Image by a multiple of 90 degrees
+
+    Args:
+        img: The image to rotate
+        degree: Multiple of 90, degrees to rotate.
+            Examples: 90 for clockwise rotation, 180, or -90 for
+            counter clockwise.
+
+    Returns:
+        The rotated image
+    """
     if degree == 0:
         return img
-    
+
     degree = (degree + 360) % 360
     return np.rot90(img, k=(4 - degree) // 90)
 

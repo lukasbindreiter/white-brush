@@ -67,6 +67,20 @@ def hsv_distance_threshold(img: np.ndarray, bg_colors=None,
 def background_difference_image(img: np.ndarray,
                                 kernel_size: int = 21,
                                 blur_kernel_size: int = 7):
+    """
+    Calculate an Image which consits of only the difference between the
+    given image and its background
+
+    Args:
+        img: The image to calculate the background diff image for
+        kernel_size: Kernel size for the erosion that is used to
+            create the background image
+        blur_kernel_size: Parameter for the gaussian blur that will
+            be performed on the background
+
+    Returns:
+        The background difference image
+    """
     if img.ndim == 3:
         img = rgb_to_gray(img)
     # we want the background black, the foreground white
@@ -119,7 +133,7 @@ def adaptive_threshold(img: np.ndarray, block_size: int, min_thresh: int):
     otherwise it will be background.
 
     Args:
-        img: The image for which to calculate a background mask
+        img: The image for which to calculate a foreground mask
         block_size: size of the neighbourhood around each pixel
         min_thresh: minimum difference from the mean of the neighbourhood
 
@@ -144,6 +158,21 @@ def adaptive_threshold(img: np.ndarray, block_size: int, min_thresh: int):
 
 
 def otsu_threshold(img: np.ndarray):
+    """
+    Calculate a foreground mask based on otsu thresholding.
+
+    Decide which pixels are foreground pixels using the Otsu threshold
+    algorithm
+
+    Args:
+        img: The image for which to calculate a foreground mask
+
+    Returns:
+        The calculated foreground mask. If an element in the mask is
+        False, this means that the corresponding pixel is part of the
+        background. If it is True, the pixel is part of the foreground.
+
+    """
     if img.ndim == 3:
         img = rgb_to_gray(img)
     _, otsu = cv2.threshold(img, 0, 255,
